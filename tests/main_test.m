@@ -1,6 +1,7 @@
 clear all;close all;clc;
 %Add main path
 current_dir = pwd;
+cd(current_dir);
 sidx = strfind(current_dir,'\');
 main_dir = current_dir(1:sidx(end)-1);
 addpath(genpath(main_dir));
@@ -16,7 +17,7 @@ clist = {'fullAC'; %1
     'flatpanel_5x5_dihedral_10_sweep'; %7
     'near_planar_case'; %8
     'further_away_case'}; %9
-csel = 1;
+csel = 1:9;
 
 flag_p1 = 0;%Plot Ajj
 flag_p2 = 0;%Plot Qjj
@@ -75,7 +76,7 @@ for ci = csel
     disp(' ');
 
     % Current version of VLM code
-    [D0,A,GAMMA,RHS,qxV,qyV,qzV,F_VLM]=VLM_DLR(M,Q,rho_air,Sc,Sm,Si,So,S,pspan,normvec);
+    [D0,A,GAMMA,RHS,qxV,qyV,qzV,F_VLM]=VLM(M,Q,rho_air,Sc,Sm,Si,So,S,pspan,normvec);
     wj = (Q(1)*normvec(:,1)+Q(2)*normvec(:,2)+Q(3)*normvec(:,3))/Qinfabs;
 
     Ajj_VLM=D0;
@@ -99,7 +100,7 @@ for ci = csel
     disp(' ');
 
     % Current code execution
-    D=Dmatrix_DLRfullvec(Sc,Si,Sm,So,M,k,normvec,pspan,pchord,D0);
+    D=DLM(Sc,Si,Sm,So,M,k,normvec,pspan,pchord,D0);
     wj = (Q(1)*normvec(:,1)+Q(2)*normvec(:,2)+Q(3)*normvec(:,3))/Qinfabs;
 
     Qjj_DLM1 = -inv(D{1,1});
