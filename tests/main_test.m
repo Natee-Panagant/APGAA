@@ -16,7 +16,7 @@ clist = {'fullAC'; %1
     'flatpanel_5x5_dihedral_10_sweep'; %7
     'near_planar_case'; %8
     'further_away_case'}; %9
-csel = 2:5;
+csel = 1;
 
 flag_p1 = 0;%Plot Ajj
 flag_p2 = 0;%Plot Qjj
