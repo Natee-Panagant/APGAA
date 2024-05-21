@@ -1,4 +1,5 @@
 function plot_panel(PanelDat)
+% Plot Aerodynamic Panels
 figure(1);clf;hold on;
 node = PanelDat.Nodes;
 ele = PanelDat.WingPanel;

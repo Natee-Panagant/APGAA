@@ -41,9 +41,11 @@ wj = (State.Qinf(1)*normvec(:,1)+State.Qinf(2)*normvec(:,2)+State.Qinf(3)*normve
 % Calculate Cp of unsteady part
 Nk = numel(State.k); % Number of Reduced Frequencies
 Cp_DLM = cell(1,Nk);
-for i = 1:numel(Nk)
+for i = 1:Nk
     Cp_DLM{i} = -inv(D{i})*wj; % Calculate Cp of each reduced frequency
 end
 
 % Plot results
-plot_panel(PanelDat);
+% plot_panel(PanelDat);
+plot_Cp(PanelDat,Cp_VLM);
+plot_Cp(PanelDat,Cp_DLM,State.k);

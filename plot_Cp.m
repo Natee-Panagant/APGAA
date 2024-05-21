@@ -1,7 +1,42 @@
-function [outputArg1,outputArg2] = plot_Cp(inputArg1,inputArg2)
-%PLOT_CP Summary of this function goes here
-%   Detailed explanation goes here
-outputArg1 = inputArg1;
-outputArg2 = inputArg2;
+function plot_Cp(PanelDat,Cp,varargin)
+if numel(varargin)>0
+    k = varargin{1};
+    mode = 2;
+else
+    mode = 1;
 end
 
+%Generate panel plotting data
+node = PanelDat.Nodes;
+ele = PanelDat.WingPanel;
+x = [node(ele(:,1),1) , node(ele(:,2),1) , node(ele(:,3),1) , node(ele(:,4),1) , node(ele(:,1),1)]';
+y = [node(ele(:,1),2) , node(ele(:,2),2) , node(ele(:,3),2) , node(ele(:,4),2) , node(ele(:,1),2)]';
+z = [node(ele(:,1),3) , node(ele(:,2),3) , node(ele(:,3),3) , node(ele(:,4),3) , node(ele(:,1),3)]';
+
+%Plot Pressure Coefficient (Cp)
+switch mode
+    case 1 %VLM plot
+        figure;clf;hold on;
+        fill3(x,y,z,Cp');
+        title(['VLM - Cp']);
+        axis equal;
+        view(-30,30);
+
+    case 2 %DLM plot
+        Nk = numel(Cp);
+        for i = 1:Nk
+            figure;clf;hold on;
+
+            subplot(1,2,1);
+            fill3(x,y,z,real(Cp{i})');
+            title(['DLM - Magnitude of Cp @k = ' num2str(k(1))]);
+            axis equal;
+            view(-30,30);
+
+            subplot(1,2,2);
+            fill3(x,y,z,imag(Cp{i})');
+            title(['DLM - Phase of Cp @k = ' num2str(k(1))]);
+            axis equal;
+            view(-30,30);
+        end
+end

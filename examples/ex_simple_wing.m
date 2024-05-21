@@ -1,5 +1,5 @@
 function [AC,State] = ex_simple_wing
-State.Qinf = [100*cosd(5) 100*sind(5) 0];% Velocity [Vx Vy Vz] for static loadings, m/s
+State.Qinf = [274.4*cosd(5) 0 274.4*sind(5)];% Velocity [Vx Vy Vz] for static loadings, m/s
 State.rho_air = 1.225;%kg/m^3
 State.M = 0.8;% Mach number
 State.k = [0.001 0.6 1.4]; %Nastran reduce frequencies (omega*Uinf/semichord)
