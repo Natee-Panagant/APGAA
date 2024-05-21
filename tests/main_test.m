@@ -127,7 +127,7 @@ end
 disp(repmat('%',1,60));
 disp(' ');
 disp(repmat('*',1,60));
-disp(repmat('*',1,60));
+disp('Comparison Summary');
 disp(repmat('*',1,60));
 disp(' ');
 if sum(err_idx)>0
@@ -141,6 +141,4 @@ else
     disp('All results converged, no errors found');
 end
 disp(' ');
-disp(repmat('*',1,60));
-disp(repmat('*',1,60));
 disp(repmat('*',1,60));
