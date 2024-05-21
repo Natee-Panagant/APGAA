@@ -46,11 +46,9 @@ for ci = csel
     disp(' ');
     disp(repmat('-',1,60));
 
-    %%%%%%%
-    % VLM %
-    %%%%%%%
-    
-
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    % VLM Evaluation of the current code %
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     [D0,A,GAMMA,RHS,qxV,qyV,qzV,F_VLM]=VLM(State.M,State.Qinf,State.rho_air,Sc,Sm,Si,So,S,pspan,normvec);
     wj = (State.Qinf(1)*normvec(:,1)+State.Qinf(2)*normvec(:,2)+State.Qinf(3)*normvec(:,3))/norm(State.Qinf);
 
@@ -58,11 +56,9 @@ for ci = csel
     Qjj_VLM = -inv(Ajj_VLM);
     Cp_VLM = Qjj_VLM*wj;
 
-    %%%%%%%
-    % DLM %
-    %%%%%%%
-    
-
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    % DLM Evaluation of the current code %
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     D=DLM(Sc,Si,Sm,So,State.M,State.k,normvec,pspan,pchord,D0);
     wj = (State.Qinf(1)*normvec(:,1)+State.Qinf(2)*normvec(:,2)+State.Qinf(3)*normvec(:,3))/norm(State.Qinf);
 
@@ -78,8 +74,7 @@ for ci = csel
     % Load reference validated VLM+DLM results
     load(['rst_' clist{ci} '.mat']);
 
-    % Comparison
-    
+    % Result Comparison
     rst_diff(1) = max(max(max(abs(Cp_VLM_ref-Cp_VLM))));
     rst_diff(2) = max(max(max(abs(Qjj_VLM_ref-Qjj_VLM))));
     
@@ -127,6 +122,8 @@ for ci = csel
         err_idx(ci) = 1;
     end
 end
+
+% Display comparison summary
 disp(repmat('%',1,60));
 disp(' ');
 disp(repmat('*',1,60));
