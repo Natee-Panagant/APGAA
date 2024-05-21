@@ -49,9 +49,7 @@ for ci = csel
     %%%%%%%
     % VLM %
     %%%%%%%
-    disp(' ');
-    disp('VLM testing - Current vs Ref_data');
-    disp(' ');
+    
 
     [D0,A,GAMMA,RHS,qxV,qyV,qzV,F_VLM]=VLM(State.M,State.Qinf,State.rho_air,Sc,Sm,Si,So,S,pspan,normvec);
     wj = (State.Qinf(1)*normvec(:,1)+State.Qinf(2)*normvec(:,2)+State.Qinf(3)*normvec(:,3))/norm(State.Qinf);
@@ -63,10 +61,7 @@ for ci = csel
     %%%%%%%
     % DLM %
     %%%%%%%
-    disp(repmat('-',1,60));
-    disp(' ');
-    disp('DLM testing - Current vs Ref_data');
-    disp(' ');
+    
 
     D=DLM(Sc,Si,Sm,So,State.M,State.k,normvec,pspan,pchord,D0);
     wj = (State.Qinf(1)*normvec(:,1)+State.Qinf(2)*normvec(:,2)+State.Qinf(3)*normvec(:,3))/norm(State.Qinf);
@@ -84,9 +79,10 @@ for ci = csel
     load(['rst_' clist{ci} '.mat']);
 
     % Comparison
+    
     rst_diff(1) = max(max(max(abs(Cp_VLM_ref-Cp_VLM))));
     rst_diff(2) = max(max(max(abs(Qjj_VLM_ref-Qjj_VLM))));
-
+    
     rst_diff(3) = max(max(max(abs((real(Cp_DLM1_ref)-real(Cp_DLM1))))));
     rst_diff(4) = max(max(max(abs((imag(Cp_DLM1_ref)-imag(Cp_DLM1))))));
     rst_diff(5) = max(max(max(abs((real(Cp_DLM2_ref)-real(Cp_DLM2))))));
@@ -101,9 +97,16 @@ for ci = csel
     rst_diff(13) = max(max(max(abs((real(Qjj_DLM3_ref)-real(Qjj_DLM3))))));
     rst_diff(14) = max(max(max(abs((imag(Qjj_DLM3_ref)-imag(Qjj_DLM3))))));
 
+    disp('VLM testing - Current vs Ref_data');
+    disp(' ');
+
     disp(['Maximum absolute diff of Cp = ' num2str(rst_diff(1))]);
     disp(['Maximum absolute diff of Qjj (AIC) = ' num2str(rst_diff(2))]);
+
+    disp(repmat('-',1,60));
+    disp('DLM testing - Current vs Ref_data');
     disp(' ');
+
     disp(['%Max real diff of Cp1 (k = ' num2str(State.k(1)) ') = ' num2str(rst_diff(3))]);
     disp(['%Max imag diff of Cp1 (k = ' num2str(State.k(1)) ') = ' num2str(rst_diff(4))]);
     disp(['%Max real diff of Cp1 (k = ' num2str(State.k(2)) ') = ' num2str(rst_diff(5))]);
@@ -117,6 +120,7 @@ for ci = csel
     disp(['%Max imag diff of Qjj2 (k = ' num2str(State.k(2)) ') = ' num2str(rst_diff(12))]);
     disp(['%Max real diff of Qjj3 (k = ' num2str(State.k(3)) ') = ' num2str(rst_diff(13))]);
     disp(['%Max imag diff of Qjj3 (k = ' num2str(State.k(3)) ') = ' num2str(rst_diff(14))]);
+    disp(repmat('-',1,60));
     disp(' ');
 
     if max(rst_diff) > 1e-10
@@ -128,6 +132,7 @@ disp(' ');
 disp(repmat('*',1,60));
 disp(repmat('*',1,60));
 disp(repmat('*',1,60));
+disp(' ');
 if sum(err_idx)>0
     disp('found error in following cases:');
     for ci=1:numel(err_idx)
@@ -138,6 +143,7 @@ if sum(err_idx)>0
 else
     disp('All results converged, no errors found');
 end
+disp(' ');
 disp(repmat('*',1,60));
 disp(repmat('*',1,60));
 disp(repmat('*',1,60));
