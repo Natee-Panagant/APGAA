@@ -1,5 +1,5 @@
-function [AC, PanelDat, AcControl, AcTrim]=PanelGen04(inputfile,state)
-[AC, AcControl, AcTrim]=feval(inputfile,state);
+function [AC, PanelDat]=PanelGen04(inputfile,state)
+[AC]=feval(inputfile,state);
 nSurf = 0;
 for i=1:numel(AC)
     try

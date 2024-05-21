@@ -1,4 +1,4 @@
-function [D0,A,GAMMA,RHS,qxV,qyV,qzV,F] = VLM_DLR(Mach,Q,rho,Sc,Sm,Si,So,S,pspan,normvec)
+function [D0,A,GAMMA,RHS,qxV,qyV,qzV,F] = VLM(Mach,Q,rho,Sc,Sm,Si,So,S,pspan,normvec)
 %%%%%%%%%%%%%%%%%%%%%%%%%
 % Vortex Lattice Method %
 %%%%%%%%%%%%%%%%%%%%%%%%%
