@@ -22,11 +22,6 @@ clist = {'fullAC'; %1
     'further_away_case'}; %9
 csel = 1:9;
 
-flag_p1 = 0;%Plot Ajj
-flag_p2 = 0;%Plot Qjj
-flag_p3 = 0;%Plot Cp
-flag_p4 = 0;%Plot VLM Loadings
-
 err_idx = zeros(numel(clist),1);
 for ci = csel
     cname = clist{ci};
