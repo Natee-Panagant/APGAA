@@ -1,4 +1,4 @@
-clear all;close all;clc;
+clearvars;close all;clc;
 %Add main path
 file_dir = mfilename('fullpath');
 sidx = strfind(file_dir,'\');
@@ -156,14 +156,14 @@ disp(repmat('*',1,60));
 disp(repmat('*',1,60));
 disp(repmat('*',1,60));
 if sum(err_idx)>0
-    disp(['found error in following cases:']);
+    disp('found error in following cases:');
     for ci=1:numel(err_idx)
         if err_idx(ci)>0
             disp(clist{ci});
         end
     end
 else
-    disp(['All results converged, no errors found']);
+    disp('All results converged, no errors found');
 end
 disp(repmat('*',1,60));
 disp(repmat('*',1,60));
