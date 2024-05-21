@@ -25,6 +25,9 @@ Npanel = size(ele,1); % Number of panels
 panel_vr = mesh2panel(node,ele);
 [Sc,Sm,Si,So,S,pspan,pchord,normvec]=lattice_setup2(panel_vr);
 
+% Plot Aerodynamic Panels
+plot_panel(PanelDat);
+
 % Vortex Lattice Method (VLM)
 [D0,A,GAMMA,RHS,qxV,qyV,qzV,F_VLM]=VLM(State.M,State.Qinf,State.rho_air,Sc,Sm,Si,So,S,pspan,normvec);
 wj = (State.Qinf(1)*normvec(:,1)+State.Qinf(2)*normvec(:,2)+State.Qinf(3)*normvec(:,3))/norm(State.Qinf);
@@ -46,6 +49,5 @@ for i = 1:Nk
 end
 
 % Plot results
-% plot_panel(PanelDat);
 plot_Cp(PanelDat,Cp_VLM);
 plot_Cp(PanelDat,Cp_DLM,State.k);
