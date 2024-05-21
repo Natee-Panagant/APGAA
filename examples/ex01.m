@@ -10,34 +10,8 @@ cd(current_dir);
 addpath(genpath(main_dir));
 format long g
 
-% Test case list
-
-
-%State Parameter
-state.alpha     = 5; % (deg)
-state.beta      = 0; % (deg)
-state.rho_air   = 1.225;  % air density (kg/m^3)
-state.M         = 0.8;          % Mach number
-state.CG        = [0 0 0];     % center of gravity
-state.k         = [0.001 0.6 1.4]; % Nastran reduce frequencies (omega*Uinf/semichord)
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% This inclined flow is for validation only (*In our formulation will later use -> state.Qinf = [Qinfabs 0 0])
-Qinfabs = 343*state.M;
-state.Qinf = Qinfabs*[cosd(state.alpha)*cosd(state.beta) -cosd(state.alpha)*sind(state.beta) sind(state.alpha)];
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-alpha = state.alpha;
-beta = state.beta;
-rho_air = state.rho_air;
-M = state.M;
-CG = state.CG;
-k = state.k;
-Q = state.Qinf;
-q = 0.5*rho_air*Qinfabs^2;
-%%%%%%%%%%%%%%%%%%%%%
-% inHouse - VLM_DLR %
-%%%%%%%%%%%%%%%%%%%%%
-[AC, PanelDat]=PanelGen04('ex_simple_wing',state);
+%Generate Aerodynamic Panel
+[AC, PanelDat]=PanelGen04('ex_simple_wing');
 
 % Convert Mesh format
 node = PanelDat.Nodes;
