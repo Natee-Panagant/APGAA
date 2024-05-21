@@ -1,13 +1,11 @@
-function [AC, AcControl, AcTrim]=GEO_flatpanel_5x5_dihedral_10(state)
+function [AC,State] = GEO_flatpanel_5x5_dihedral_10
+State.Qinf = [274.4*cosd(5) 0 274.4*sind(5)];% Velocity [Vx Vy Vz] for static loadings, m/s
+State.rho_air = 1.225;%kg/m^3
+State.M = 0.8;% Mach number
+State.k = [0.001 0.6 1.4]; %Nastran reduce frequencies (omega*Uinf/semichord)
+
 %% Wing section 1 horizontal
 AC(1).Label='Wing';
-AC(1).State.Qinf = state.Qinf;% Velocity for static loadings, m/s
-AC(1).State.rho_air=state.rho_air;%kg/m^3
-AC(1).State.M=state.M;% Mach number
-AC(1).State.dt=0.5;% time interval
-AC(1).State.rG=state.CG;% center of mass
-AC(1).State.k=state.k; %Nastran reduce frequencies (omega*Uinf/semichord)
-
 AC(1).Config.Proot=[0 0 0];%m  [x  y  z]
 AC(1).Config.Ptip=[0 4 0];%m   [x  y  z]
 AC(1).Config.rChord=1;%m

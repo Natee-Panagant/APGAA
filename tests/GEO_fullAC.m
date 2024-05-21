@@ -1,13 +1,11 @@
-function [AC, AcControl, AcTrim]=GEO_fullAC(state)
+function [AC,State] = GEO_fullAC
+State.Qinf = [274.4*cosd(5) 0 274.4*sind(5)];% Velocity [Vx Vy Vz] for static loadings, m/s
+State.rho_air = 1.225;%kg/m^3
+State.M = 0.8;% Mach number
+State.k = [0.001 0.6 1.4]; %Nastran reduce frequencies (omega*Uinf/semichord)
+
 %% Wing section 1 horizontal
 AC(1).Label='Wing';
-AC(1).State.Qinf = state.Qinf;% Velocity for static loadings, m/s
-AC(1).State.rho_air=state.rho_air;%kg/m^3
-AC(1).State.M=state.M;% Mach number
-AC(1).State.dt=0.5;% time interval
-AC(1).State.rG=state.CG;% center of mass
-AC(1).State.k=state.k; %Nastran reduce frequencies (omega*Uinf/semichord)
-
 AC(1).Config.Proot=[21 2 0];%m  [x  y  z]
 AC(1).Config.Ptip=[17 15 0];%m   [x  y  z]
 AC(1).Config.rChord=5;%m
@@ -27,7 +25,6 @@ AC(1).SubSurf(1).type = 1; % 1 = non-control surface, 2 = control surface
 
 %% Vertical tail
 AC(2).Label='Vertical tail';
-AC(2).State = AC(1).State;
 AC(2).Config.Proot=[32 0 2];%m (*Vertical tail must input in x-y plane then rotate with dihedral angle)
 AC(2).Config.Ptip=[37 0 7];%m  (*Vertical tail must input in x-y plane then rotate with dihedral angle)
 AC(2).Config.rChord=6;%m
@@ -47,7 +44,6 @@ AC(2).SubSurf(1).type = 1; % 1 = non-control surface, 2 = control surface
 
 %% Horizontal tail
 AC(3).Label='Horizontal tail';
-AC(3).State = AC(1).State;
 AC(3).Config.Proot=[37 0 7];%m
 AC(3).Config.Ptip=[40 7 7];%m
 AC(3).Config.rChord=3;%m
@@ -67,7 +63,6 @@ AC(3).SubSurf(1).type = 1; % 1 = non-control surface, 2 = control surface
 
 %% Fuselage
 AC(4).Label='Fuselage';
-AC(4).State = AC(1).State;
 AC(4).Config.Proot=[0 0 0];%m
 AC(4).Config.Ptip=[0 2 0];%m
 AC(4).Config.rChord=40;%m

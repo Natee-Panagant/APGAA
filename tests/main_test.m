@@ -26,33 +26,11 @@ err_idx = zeros(numel(clist),1);
 for ci = csel
     cname = clist{ci};
     fpath = [pwd '\PanelAero_Validation_RST\' cname '\'];
-
-    %State Parameter
-    state.alpha     = 5; % (deg)
-    state.beta      = 0; % (deg)
-    state.rho_air   = 1.225;  % air density (kg/m^3)
-    state.M         = 0.8;          % Mach number
-    state.CG        = [0 0 0];     % center of gravity
-    state.k         = [0.001 0.6 1.4]; % Nastran reduce frequencies (omega*Uinf/semichord)
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    % This inclined flow is for validation only (*In our formulation will later use -> state.Qinf = [Qinfabs 0 0])
-    Qinfabs = 343*state.M;
-    state.Qinf = Qinfabs*[cosd(state.alpha)*cosd(state.beta) -cosd(state.alpha)*sind(state.beta) sind(state.alpha)];
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-    alpha = state.alpha;
-    beta = state.beta;
-    rho_air = state.rho_air;
-    M = state.M;
-    CG = state.CG;
-    k = state.k;
-    Q = state.Qinf;
-    q = 0.5*rho_air*Qinfabs^2;
     %%%%%%%%%%%%%%%%%%%%%
     % inHouse - VLM_DLR %
     %%%%%%%%%%%%%%%%%%%%%
-    [AC, PanelDat, AcControl, AcTrim]=PanelGen04(['GEO_' cname],state);
-
+    [AC, PanelDat, State]=PanelGen04(['GEO_' cname]);
+    
     % Convert Mesh format
     node = PanelDat.Nodes;
     ele = PanelDat.WingPanel;
@@ -75,8 +53,8 @@ for ci = csel
     disp('VLM testing - Current vs Ref_data');
     disp(' ');
 
-    [D0,A,GAMMA,RHS,qxV,qyV,qzV,F_VLM]=VLM(M,Q,rho_air,Sc,Sm,Si,So,S,pspan,normvec);
-    wj = (Q(1)*normvec(:,1)+Q(2)*normvec(:,2)+Q(3)*normvec(:,3))/Qinfabs;
+    [D0,A,GAMMA,RHS,qxV,qyV,qzV,F_VLM]=VLM(State.M,State.Qinf,State.rho_air,Sc,Sm,Si,So,S,pspan,normvec);
+    wj = (State.Qinf(1)*normvec(:,1)+State.Qinf(2)*normvec(:,2)+State.Qinf(3)*normvec(:,3))/norm(State.Qinf);
 
     Ajj_VLM=D0;
     Qjj_VLM = -inv(Ajj_VLM);
@@ -90,8 +68,8 @@ for ci = csel
     disp('DLM testing - Current vs Ref_data');
     disp(' ');
 
-    D=DLM(Sc,Si,Sm,So,M,k,normvec,pspan,pchord,D0);
-    wj = (Q(1)*normvec(:,1)+Q(2)*normvec(:,2)+Q(3)*normvec(:,3))/Qinfabs;
+    D=DLM(Sc,Si,Sm,So,State.M,State.k,normvec,pspan,pchord,D0);
+    wj = (State.Qinf(1)*normvec(:,1)+State.Qinf(2)*normvec(:,2)+State.Qinf(3)*normvec(:,3))/norm(State.Qinf);
 
     Qjj_DLM1 = -inv(D{1,1});
     Cp_DLM1 = Qjj_DLM1*wj;
@@ -126,19 +104,19 @@ for ci = csel
     disp(['Maximum absolute diff of Cp = ' num2str(rst_diff(1))]);
     disp(['Maximum absolute diff of Qjj (AIC) = ' num2str(rst_diff(2))]);
     disp(' ');
-    disp(['%Max real diff of Cp1 (k = ' num2str(k(1)) ') = ' num2str(rst_diff(3))]);
-    disp(['%Max imag diff of Cp1 (k = ' num2str(k(1)) ') = ' num2str(rst_diff(4))]);
-    disp(['%Max real diff of Cp1 (k = ' num2str(k(2)) ') = ' num2str(rst_diff(5))]);
-    disp(['%Max imag diff of Cp1 (k = ' num2str(k(2)) ') = ' num2str(rst_diff(6))]);
-    disp(['%Max real diff of Cp1 (k = ' num2str(k(3)) ') = ' num2str(rst_diff(7))]);
-    disp(['%Max imag diff of Cp1 (k = ' num2str(k(3)) ') = ' num2str(rst_diff(8))]);
+    disp(['%Max real diff of Cp1 (k = ' num2str(State.k(1)) ') = ' num2str(rst_diff(3))]);
+    disp(['%Max imag diff of Cp1 (k = ' num2str(State.k(1)) ') = ' num2str(rst_diff(4))]);
+    disp(['%Max real diff of Cp1 (k = ' num2str(State.k(2)) ') = ' num2str(rst_diff(5))]);
+    disp(['%Max imag diff of Cp1 (k = ' num2str(State.k(2)) ') = ' num2str(rst_diff(6))]);
+    disp(['%Max real diff of Cp1 (k = ' num2str(State.k(3)) ') = ' num2str(rst_diff(7))]);
+    disp(['%Max imag diff of Cp1 (k = ' num2str(State.k(3)) ') = ' num2str(rst_diff(8))]);
     disp(' ');
-    disp(['%Max real diff of Qjj1 (k = ' num2str(k(1)) ') = ' num2str(rst_diff(9))]);
-    disp(['%Max imag diff of Qjj1 (k = ' num2str(k(1)) ') = ' num2str(rst_diff(10))]);
-    disp(['%Max real diff of Qjj2 (k = ' num2str(k(2)) ') = ' num2str(rst_diff(11))]);
-    disp(['%Max imag diff of Qjj2 (k = ' num2str(k(2)) ') = ' num2str(rst_diff(12))]);
-    disp(['%Max real diff of Qjj3 (k = ' num2str(k(3)) ') = ' num2str(rst_diff(13))]);
-    disp(['%Max imag diff of Qjj3 (k = ' num2str(k(3)) ') = ' num2str(rst_diff(14))]);
+    disp(['%Max real diff of Qjj1 (k = ' num2str(State.k(1)) ') = ' num2str(rst_diff(9))]);
+    disp(['%Max imag diff of Qjj1 (k = ' num2str(State.k(1)) ') = ' num2str(rst_diff(10))]);
+    disp(['%Max real diff of Qjj2 (k = ' num2str(State.k(2)) ') = ' num2str(rst_diff(11))]);
+    disp(['%Max imag diff of Qjj2 (k = ' num2str(State.k(2)) ') = ' num2str(rst_diff(12))]);
+    disp(['%Max real diff of Qjj3 (k = ' num2str(State.k(3)) ') = ' num2str(rst_diff(13))]);
+    disp(['%Max imag diff of Qjj3 (k = ' num2str(State.k(3)) ') = ' num2str(rst_diff(14))]);
     disp(' ');
 
     if max(rst_diff) > 1e-10
