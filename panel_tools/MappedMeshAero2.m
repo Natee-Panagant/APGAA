@@ -1,4 +1,5 @@
 function [PanelDat,surfNum2]=MappedMeshAero2(AC,isurf,surfNum,PNP)
+PNP0=PNP;
 % Qinf=AC(1).State.Qinf;
 % dt=AC(1).State.dt;
 if AC(isurf).Config.Dihedral_ref == 1
@@ -137,86 +138,7 @@ for i=1:length(AC(isurf).SubSurf)
 %     nwake(i)=size(panelDat.NodesW,1);
     
     
-    if strcmp(AC(isurf).Config.Symmetry,'yes')
-        %Add surface name and panel index of control surfaces (Natee)
-        PNP2=PNP+size(PanelDat.WingPanel,1);%Previous Npanel 
-        %Right-side Surface
-        PanelDat.SurfName=[PanelDat.SurfName,{[AC(isurf).SubSurf(i).Name 'R']}];
-        PanelDat.Panel_idx=[PanelDat.Panel_idx,{PNP2+1:PNP2+(npanel(i))/2}];%Store Panel index of each surface (Natee)
-        PanelDat.SurfID=[PanelDat.SurfID;reshape(surfID,nspan*sum(nchord),1)];
-        
-        %Left-side Surface
-        PanelDat.SurfName=[PanelDat.SurfName,{[AC(isurf).SubSurf(i).Name 'L']}];
-        PanelDat.Panel_idx=[PanelDat.Panel_idx,{PNP2+1+(npanel(i)/2):PNP2+(npanel(i))}];%Store Panel index of each surface (Natee)
-        surfID=surfID+1;
-        surfNum=surfNum+length(nchord);
-        surfNum2=surfNum2+1;
-        PanelDat.SurfID=[PanelDat.SurfID;reshape(surfID,nspan*sum(nchord),1)];
-        
-        %Add rotating axis for control surfaces (Natee)
-        switch AC(isurf).SubSurf(i).Name
-            case 'Flap'
-                n2pR=panelDat.Nodes(panelDat.WingPanel(1,[1 2]),:);
-                if n2pR(1,2)>n2pR(2,2)%Rotation Axis of the Right-side Flap pointing inward
-                   n2pR=n2pR([2 1],:); 
-                end
-                n2pL=n2pR([2 1],:);%swap node 1-2 (flip)
-                n2pL(:,2)=-n2pL(:,2);%Rotation Axis of the Left-side Flap pointing outward (flip + inverse Y)
-            case 'Aileron'
-                n2pR=panelDat.Nodes(panelDat.WingPanel(1,[1 2]),:);
-                if n2pR(1,2)<n2pR(2,2)%Rotation Axis of the Right-side wing pointing outward
-                   n2pR=n2pR([2 1],:); 
-                end
-                n2pL=n2pR;
-                n2pL(:,2)=-n2pL(:,2);%Rotation Axis of the Left-side wing pointing outward (inverse Y)
-            case 'Elevator'
-                n2pR=panelDat.Nodes(panelDat.WingPanel(1,[1 2]),:);
-                if n2pR(1,2)>n2pR(2,2)%Rotation Axis of the Right-side elevator pointing inward
-                   n2pR=n2pR([2 1],:); 
-                end
-                n2pL=n2pR([2 1],:);%swap node 1-2 (flip)
-                n2pL(:,2)=-n2pL(:,2);%Rotation Axis of the Left-side elevator pointing outward (flip + inverse Y)
-            otherwise
-                n2pR=[];
-        end
-        if numel(n2pR)>0
-            vecR=n2pR(2,:)-n2pR(1,:);
-            vecL=n2pL(2,:)-n2pL(1,:);
-            PanelDat.rot_axis_pnt=[PanelDat.rot_axis_pnt,{n2pR}];
-            PanelDat.rot_axis_pnt=[PanelDat.rot_axis_pnt,{n2pL}];
-            PanelDat.rot_axis_vec=[PanelDat.rot_axis_vec,{vecR}];
-            PanelDat.rot_axis_vec=[PanelDat.rot_axis_vec,{vecL}];
-        else
-            PanelDat.rot_axis_pnt=[PanelDat.rot_axis_pnt,{[]},{[]}];
-            PanelDat.rot_axis_vec=[PanelDat.rot_axis_vec,{[]},{[]}];
-        end
-        %
-    else
-        PNP2=PNP+size(PanelDat.WingPanel,1);%Previous Npanel 
-        PanelDat.SurfName=[PanelDat.SurfName,{AC(isurf).SubSurf(i).Name}];
-        PanelDat.Panel_idx=[PanelDat.Panel_idx,{PNP2+1:PNP2+npanel(i)}];%Store Panel index of each surface (Natee)
-        PanelDat.SurfID=[PanelDat.SurfID;reshape(surfID,nspan*sum(nchord),1)];
-        
-        %Add rotating axis for control surfaces (Natee)
-        switch AC(isurf).SubSurf(i).Name
-            case 'Rudder'
-                n2p=panelDat.Nodes(panelDat.WingPanel(1,[1 2]),:);
-                if n2p(1,3)<n2p(2,3)%Rotation Axis of the rudder is pointing upward
-                   n2p=n2p([2 1],:); 
-                end
-            otherwise
-                n2p=[];
-        end
-        if numel(n2p)>0
-            rvec=n2p(2,:)-n2p(1,:);
-            PanelDat.rot_axis_pnt=[PanelDat.rot_axis_pnt,{n2p}];
-            PanelDat.rot_axis_vec=[PanelDat.rot_axis_vec,{rvec}];
-        else
-            PanelDat.rot_axis_pnt=[PanelDat.rot_axis_pnt,{[]}];
-            PanelDat.rot_axis_vec=[PanelDat.rot_axis_vec,{[]}];
-        end
-        %
-    end
+    
     PanelDat.Nodes=[PanelDat.Nodes;panelDat.Nodes];
 %     PanelDat.NodesW=[PanelDat.NodesW;panelDat.NodesW];
     PanelDat.VtxPt=[PanelDat.VtxPt;panelDat.VtxPt];
@@ -234,13 +156,34 @@ for i=1:length(AC(isurf).SubSurf)
 %     PanelDat.SurfID=[PanelDat.SurfID;reshape(surfID,nspan*sum(nchord),1)];
     
     if strcmp(AC(isurf).Config.Symmetry,'yes')
-%         PanelDat.SurfID=[PanelDat.SurfID;reshape(surfID,nspan*sum(nchord),1)];
+        %Add surface name and panel index of symmetry control surfaces (Natee)
+        %Right-side Surface
+        PanelDat.SurfName=[PanelDat.SurfName,{[AC(isurf).SubSurf(i).Name 'R']}];
+        idxR = {(PNP+1):(PNP+npanel(i)/2)};
+        PanelDat.Panel_idx=[PanelDat.Panel_idx,idxR];%Store Panel index of each surface (Natee)
+        PanelDat.SurfID=[PanelDat.SurfID;reshape(surfID,nspan*sum(nchord),1)];
+
+        %Left-side Surface
+        PanelDat.SurfName=[PanelDat.SurfName,{[AC(isurf).SubSurf(i).Name 'L']}];
+        idxL = {(PNP+npanel(i)/2+1):(PNP+npanel(i))};
+        PanelDat.Panel_idx=[PanelDat.Panel_idx,idxL];%Store Panel index of each surface (Natee)
+        surfID=surfID+1;
+        surfNum=surfNum+length(nchord);
+        surfNum2=surfNum2+1;
+        PanelDat.SurfID=[PanelDat.SurfID;reshape(surfID,nspan*sum(nchord),1)];
+        
         nspan_ass=[nspan_ass;sum(nspan);sum(nspan)];%nspan of all subsurface
         nchord_ass=[nchord_ass;sum(nchord);sum(nchord)];%nchord of all subsurface
     else
+         %Add surface name and panel index of non-symmetry control surface (Natee)
+        PanelDat.SurfName=[PanelDat.SurfName,{AC(isurf).SubSurf(i).Name}];
+        PanelDat.Panel_idx=[PanelDat.Panel_idx,{(PNP+1):(PNP+npanel(i))}];%Store Panel index of each surface (Natee)
+        PanelDat.SurfID=[PanelDat.SurfID;reshape(surfID,nspan*sum(nchord),1)];
+
         nspan_ass=[nspan_ass;sum(nspan)];%nspan of all subsurface
         nchord_ass=[nchord_ass;sum(nchord)];%nchord of all subsurface
     end
+    PNP = PNP+npanel(i);
 %     figure(5),clf,hold on
 %     surf(x1,y1,0*x1,'facecolor','g','facealpha',0.5)
 %     surf(x2,y2,z2,'facecolor','r','facealpha',0.5)
@@ -254,6 +197,106 @@ PanelDat.npanel=sum(npanel);
 % PanelDat.nwake=sum(nwake);
 PanelDat.nspan=nspan_ass;
 PanelDat.nchord=nchord_ass;
+counter = 1;
+
+
+
+
+
+
+
+
+
+PanelDat.Nodes2=PanelDat.Nodes;
+
+for i=1:length(AC(isurf).SubSurf)
+    if strcmp(AC(isurf).Config.Symmetry,'yes')
+        %Add rotating axis for control surfaces (Natee)
+        switch AC(isurf).SubSurf(i).Name
+            case 'Flap'
+                n2pR=panelDat.Nodes(panelDat.WingPanel(1,[1 2]),:);
+                if n2pR(1,2)>n2pR(2,2)%Rotation Axis of the Right-side Flap pointing inward
+                    n2pR=n2pR([2 1],:);
+                end
+                n2pL=n2pR([2 1],:);%swap node 1-2 (flip)
+                n2pL(:,2)=-n2pL(:,2);%Rotation Axis of the Left-side Flap pointing outward (flip + inverse Y)
+            case 'Aileron'
+                n2pR=panelDat.Nodes(panelDat.WingPanel(1,[1 2]),:);
+                if n2pR(1,2)<n2pR(2,2)%Rotation Axis of the Right-side wing pointing outward
+                    n2pR=n2pR([2 1],:);
+                end
+                n2pL=n2pR;
+                n2pL(:,2)=-n2pL(:,2);%Rotation Axis of the Left-side wing pointing outward (inverse Y)
+            case 'Elevator'
+                n2pR=panelDat.Nodes(panelDat.WingPanel(1,[1 2]),:);
+                if n2pR(1,2)>n2pR(2,2)%Rotation Axis of the Right-side elevator pointing inward
+                    n2pR=n2pR([2 1],:);
+                end
+                n2pL=n2pR([2 1],:);%swap node 1-2 (flip)
+                n2pL(:,2)=-n2pL(:,2);%Rotation Axis of the Left-side elevator pointing outward (flip + inverse Y)
+            otherwise
+                n2pR=[];
+        end
+        if numel(n2pR)>0
+            vecR=n2pR(2,:)-n2pR(1,:);
+            vecR=vecR/norm(vecR);
+
+            vecL=n2pL(2,:)-n2pL(1,:);
+            vecL=vecL/norm(vecL);
+
+            PanelDat.rot_axis_pnt=[PanelDat.rot_axis_pnt,{n2pR}];
+            PanelDat.rot_axis_pnt=[PanelDat.rot_axis_pnt,{n2pL}];
+            PanelDat.rot_axis_vec=[PanelDat.rot_axis_vec,{vecR}];
+            PanelDat.rot_axis_vec=[PanelDat.rot_axis_vec,{vecL}];
+            
+            % Rotate Right Control Surfaces
+            zeta = AC(isurf).SubSurf(i).adjust_angle;
+            niR = unique(reshape(PanelDat.WingPanel(PanelDat.Panel_idx{counter}-PNP0,:),1,[]));
+            P1R = PanelDat.Nodes(niR,:);
+            P2R = rot_arbitary_axis(P1R,vecR,n2pR(1,:),zeta);
+            PanelDat.Nodes(niR,:) = P2R;
+
+            % Rotate Left Control Surfaces
+            niL = unique(reshape(PanelDat.WingPanel(PanelDat.Panel_idx{counter+1}-PNP0,:),1,[]));
+            P1L = PanelDat.Nodes(niL,:);
+            P2L = rot_arbitary_axis(P1L,vecL,n2pL(1,:),zeta);
+            PanelDat.Nodes(niL,:) = P2L;
+        else
+            PanelDat.rot_axis_pnt=[PanelDat.rot_axis_pnt,{[]},{[]}];
+            PanelDat.rot_axis_vec=[PanelDat.rot_axis_vec,{[]},{[]}];
+        end
+
+        counter = counter+2;
+    else
+        %Add rotating axis for control surfaces (Natee)
+        switch AC(isurf).SubSurf(i).Name
+            case 'Rudder'
+                n2p=panelDat.Nodes(panelDat.WingPanel(1,[1 2]),:);
+                if n2p(1,3)<n2p(2,3)%Rotation Axis of the rudder is pointing upward
+                    n2p=n2p([2 1],:);
+                end
+            otherwise
+                n2p=[];
+        end
+        if numel(n2p)>0
+            rvec=n2p(2,:)-n2p(1,:);
+            PanelDat.rot_axis_pnt=[PanelDat.rot_axis_pnt,{n2p}];
+            PanelDat.rot_axis_vec=[PanelDat.rot_axis_vec,{rvec}];
+
+            % Rotate Right Control Surfaces
+            zeta = AC(isurf).SubSurf(i).adjust_angle;
+            ni = unique(reshape(PanelDat.WingPanel(PanelDat.Panel_idx{counter}-PNP0,:),1,[]));
+            P1 = PanelDat.Nodes(ni,:);
+            P2 = rot_arbitary_axis(P1,rvec,n2p(1,:),zeta);
+            PanelDat.Nodes(ni,:) = P2;
+        else
+            PanelDat.rot_axis_pnt=[PanelDat.rot_axis_pnt,{[]}];
+            PanelDat.rot_axis_vec=[PanelDat.rot_axis_vec,{[]}];
+        end
+        counter = counter+1;
+    end
+end
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % function panelDat=meshgen(x2,y2,z2,nspan,nchord,nwake,Incidence,Dihedral,...
 %     Pref,Qinf,dt,Symmetry,span)
@@ -505,3 +548,26 @@ if strcmp(Symmetry,'yes')
 %     panelDat.TrailPanel=[TrailElem;npanel+TrailElem];
 end
 
+function P2 = rot_arbitary_axis(P1,vec,pnt,zet)
+% Rotate points around an arbitary axis
+% P1   = input points (size = number of points x 3)
+% vec  = direction vector of the arbitary axis (size = 1 x 3)
+% pnt  = a point on the arbitary axis (size = 1 x 3)
+% zet  = a rotation angle (size = 1 x 1)
+
+u = vec/norm(vec);
+ux = u(1);
+uy = u(2);
+uz = u(3);
+
+s = sin(zet);
+c = cos(zet);
+
+% Transformation matrix
+T = [c+ux*ux*(1-c)       ux*uy*(1-c)-uz*s  ux*uz*(1-c)+uy*s;
+     uy*ux*(1-c)+uz*s    c+uy*uy*(1-c)     uy*uz*(1-c)-ux*s;
+     uz*ux*(1-c)-uy*s    uz*uy*(1-c)+ux*s  c+uz*uz*(1-c)   ];
+
+for i = 1:size(P1,1)
+    P2(i,:) = pnt + (T*(P1(i,:)-pnt)')';
+end
