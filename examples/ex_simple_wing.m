@@ -1,5 +1,5 @@
 function [AC,State] = ex_simple_wing
-State.Qinf = [274.4*cosd(5) 0 274.4*sind(5)];% Velocity [Vx Vy Vz] for static loadings, m/s
+State.Qinf = [274.4 0 0];% Velocity [Vx Vy Vz] for static loadings, m/s
 State.rho_air = 1.225;%kg/m^3
 State.M = 0.8;% Mach number
 State.k = [0.001 0.6 1.4]; %Nastran reduce frequencies (omega*Uinf/semichord)
@@ -10,7 +10,7 @@ AC(1).Config.Proot = [4.5 0 0];%m  [x  y  z]
 AC(1).Config.Ptip = [5.5 3 0];%m   [x  y  z]
 AC(1).Config.rChord = 1.5;%m
 AC(1).Config.tChord = 1;%m
-AC(1).Config.Incidence = 0*pi/180;% incidence (radian)
+AC(1).Config.Incidence = 5*pi/180;% incidence (radian)
 AC(1).Config.Airfoil = 'flat';% Airfoil file
 AC(1).Config.Dihedral = 15*pi/180;% dihedral angle (radian)
 AC(1).Config.Dihedral_ref = 1;% = 1 -> rotate around origin, = 2 -> rotate around Proot

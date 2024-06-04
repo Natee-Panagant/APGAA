@@ -8,7 +8,7 @@ main_dir = file_dir(1:sidx(end-1));
 cd(current_dir);
 
 addpath(genpath(main_dir));
-format long g
+format shortEng
 
 %Generate Aerodynamic Panel
 [AC, PanelDat, State] = PanelGen04('ex_simple_wing'); % Panel generation -> Input a string of input filename which is 'ex_simple_wing' in this case
@@ -47,6 +47,11 @@ Cp_DLM = cell(1,Nk);
 for i = 1:Nk
     Cp_DLM{i} = -inv(D{i})*wj; % Calculate Cp of each reduced frequency
 end
+
+F_VLM_total = sum(F_VLM,1);
+disp(['Fx_total = ' num2str(F_VLM_total(1),'%1.2f')]);
+disp(['Fy_total = ' num2str(F_VLM_total(2),'%1.2f')]);
+disp(['Fz_total = ' num2str(F_VLM_total(3),'%1.2f')]);
 
 % Plot results
 plot_Cp(PanelDat,Cp_VLM);

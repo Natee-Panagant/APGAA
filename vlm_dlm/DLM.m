@@ -1,4 +1,4 @@
-function Dij=Dmatrix_DLRfullvec(Pc,Pi,Pm,Po,M,k,N,pspan,pchord,varargin)
+function Dij=DLM(Pc,Pi,Pm,Po,M,k,N,pspan,pchord,varargin)
 %Using I1/I2 Integral formulation from
 %DLR-IB-AE-GO-2020-137
 %An Implementation of the Vortex Lattice and the Doublt Lattice Method Version 1.04
