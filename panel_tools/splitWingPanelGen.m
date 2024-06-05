@@ -1,6 +1,19 @@
 function WgOut=splitWingPanelGen(Wg,iSurf)
+%%Natee Add vertical Ptip input support
+if Wg.Proot(2)==Wg.Ptip(2)
+    Wg.Ptip(2)=Wg.Proot(2)+(Wg.Ptip(3)-Wg.Proot(3));
+    Wg.Ptip(3)=Wg.Proot(3);
+    Wg.Dihedral=90*pi/180;
+    Wg.dRefPt=Wg.Proot;
+end
+%%
+
 % Panel generation
-Airfoil=load(Wg.Airfoil);
+if strcmp(Wg.Airfoil,'flat')
+    Airfoil = [linspace(0,1,20)',zeros(20,1)];
+else
+    Airfoil=load(Wg.Airfoil);
+end
 if Airfoil(1,1)>0
     UpperX=Airfoil(2:Airfoil(1,1)+1,1);
     UpperZ=Airfoil(2:Airfoil(1,1)+1,2);

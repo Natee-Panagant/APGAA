@@ -1,4 +1,4 @@
-function [AC,State] = ex_simple_wing
+function [AC,State] = ex_simple_AC
 State.Qinf = [274.4 0 0];% Velocity [Vx Vy Vz] for static loadings, m/s
 State.rho_air = 1.225;%kg/m^3
 State.M = 0.8;% Mach number
@@ -11,7 +11,7 @@ AC(1).Config.Ptip = [5.5 3 0];%m   [x  y  z]
 AC(1).Config.rChord = 1.5;%m
 AC(1).Config.tChord = 1;%m
 AC(1).Config.Incidence = 5*pi/180;% incidence (radian)
-AC(1).Config.Airfoil = 'flat';% Airfoil file
+AC(1).Config.Airfoil = 'N64210.dat';% Airfoil file
 AC(1).Config.Dihedral = 15*pi/180;% dihedral angle (radian)
 AC(1).Config.Dihedral_ref = 1;% = 1 -> rotate around origin, = 2 -> rotate around Proot
 AC(1).Config.Symmetry = 'yes';% symmetrical wing
@@ -38,7 +38,7 @@ AC(2).Config.Ptip = [8 0 1];%m   [x  y  z]
 AC(2).Config.rChord = 1;%m
 AC(2).Config.tChord = 0.5;%m
 AC(2).Config.Incidence = 0*pi/180;% incidence (radian)
-AC(2).Config.Airfoil = 'flat';% Airfoil file
+AC(2).Config.Airfoil = 'N64210.dat';% Airfoil file
 AC(2).Config.Dihedral = 0*pi/180;% dihedral angle (radian)
 AC(2).Config.Dihedral_ref = 1;% = 1 -> rotate around origin, = 2 -> rotate around Proot
 AC(2).Config.Symmetry = 'no';% symmetrical wing
@@ -65,7 +65,7 @@ AC(3).Config.Ptip = [8 1 0];%m   [x  y  z]
 AC(3).Config.rChord = 0.8;%m
 AC(3).Config.tChord = 0.5;%m
 AC(3).Config.Incidence = 0*pi/180;% incidence (radian)
-AC(3).Config.Airfoil = 'flat';% Airfoil file
+AC(3).Config.Airfoil = 'N64210.dat';% Airfoil file
 AC(3).Config.Dihedral = 10*pi/180;% dihedral angle (radian)
 AC(3).Config.Dihedral_ref = 2;% = 1 -> rotate around origin, = 2 -> rotate around Proot
 AC(3).Config.Symmetry = 'yes';% symmetrical wing

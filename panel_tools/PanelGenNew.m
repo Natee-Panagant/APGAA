@@ -1,8 +1,20 @@
 function PanelGenNew
+clear all;clc;%close all;
 %[AC,PanelDat]=PanelGenNew(inputfile)
 figure(1),clf,hold on
 addpath(genpath(pwd));
-AC=feval('AcModel02');
+
+clist = {'fullAC'; %1
+    'flatpanel_5x5'; %2
+    'flatpanel_5x5_sweep'; %3
+    'flatpanel_5x5_dihedral_10'; %4
+    'flatpanel_5x5_dihedral_45'; %5
+    'flatpanel_5x5_vertical'; %6
+    'flatpanel_5x5_dihedral_10_sweep'; %7
+    'near_planar_case'; %8
+    'further_away_case'}; %9
+
+AC=feval(['GEO_' clist{9}]);%feval('AcModel00');
 nSurf=size(AC,2);
 
 PanelDat.Nodes=[];
@@ -25,7 +37,13 @@ for i=1:nSurf
     iLabel1=strcmp({AC(i).Label}, 'Wing');%Wing
     iLabel2=strcmp({AC(i).Label}, 'Horizontal tail');%Horizontal tail
     iLabel3=strcmp({AC(i).Label}, 'Vertical tail');%Vertical tail
-    if iLabel1||iLabel2||iLabel3
+    iLabel4=strcmp({AC(i).Label}, 'Fuselage');%Fuselage
+    if iLabel1||iLabel2||iLabel3||iLabel4
+        %% Natee fix error for input without SubSurf (no control surfaces)
+        if ~isfield(AC(i),'SubSurf')
+            AC(i).SubSurf=[];
+        end
+        %%
         if size(AC(i).SubSurf,2)==0
             iSurf=iSurf+1;
             AcSurf=fullWingPanelGen(AC(i),[0 1]);
@@ -120,7 +138,7 @@ save PanelTemp Trl nPanel
 % plotColoredSurfs(PanelDat.Nodes,PanelDat.WingPanel,...
 %     PanelDat.SurfID,Colors,'fill','off','off')
 view(30,70)
-% axis equal
+axis equal
 
 %%%%%%%%% sub-functions %%%%%%%
 function [iInterval,iSubSurf]=getWingSec(AC)

@@ -1,84 +1,79 @@
-function [AC,State] = GEO_fullAC
-State.Qinf = [274.4*cosd(5) 0 274.4*sind(5)];% Velocity [Vx Vy Vz] for static loadings, m/s
-State.rho_air = 1.225;%kg/m^3
-State.M = 0.8;% Mach number
-State.k = [0.001 0.6 1.4]; %Nastran reduce frequencies (omega*Uinf/semichord)
+function [AC,FC] = GEO_fullAC
+FC.Qinf = [274.4*cosd(5) 0 274.4*sind(5)];% Velocity [Vx Vy Vz] for static loadings, m/s
+FC.rho_air = 1.225;%kg/m^3
+FC.M = 0.8;% Mach number
+FC.k = [0.001 0.6 1.4]; %Nastran reduce frequencies (omega*Uinf/semichord)
 
 %% Wing section 1 horizontal
+wingXpos=21;%wing x position, meter
+wingYpos=2;%wing y position, meter
+wingZpos=0;%wing z position, meter
 AC(1).Label='Wing';
-AC(1).Config.Proot=[21 2 0];%m  [x  y  z]
-AC(1).Config.Ptip=[17 15 0];%m   [x  y  z]
-AC(1).Config.rChord=5;%m
-AC(1).Config.tChord=2;%m
-AC(1).Config.Incidence=0*pi/180;% incidence, radian and rotating point (Proot of surface 1)
-AC(1).Config.Airfoil='flat';% Airfoil file
-AC(1).Config.Dihedral=0*pi/180;% dihedral angle
-AC(1).Config.Dihedral_ref = 1;% = 1 -> rotate around x-axis, = 2 -> rotate around Proot
-AC(1).Config.Symmetry='yes';% symmetrical wing
+AC(1).Proot=[wingXpos wingYpos wingZpos];%m
+AC(1).Ptip=[wingXpos-4 wingYpos+13 wingZpos];%m
+AC(1).rChord=5;%m
+AC(1).tChord=2;%m
+AC(1).nSpanPanel=10;% no. of spanwise vortex panels
+AC(1).nChordPanel=4;% no. of chordwise vortex panels
+AC(1).Incidence=0*pi/180;% incidence, radian and rotating point (Proot of surface 1)
+AC(1).iRefPt=[wingXpos wingYpos wingZpos];% reference point for incidence angle rotating
+AC(1).Airfoil='flat';% Airfoil file
+AC(1).Dihedral=0*pi/180;% dihedral angle
+AC(1).dRefPt=[0 0 wingZpos];% % reference point for dihedral angle rotating 
+AC(1).Symmetry='yes';% symmetrical wing
 
-% Aero Analysis (Gen Panel)                                                       
-AC(1).SubSurf(1).Name='Wing';% wing surface
-AC(1).SubSurf(1).SpanData=[0 1 10];% span percentage interval, nspan
-AC(1).SubSurf(1).ChordIntv=[0 1];%chord percentage interval
-AC(1).SubSurf(1).ChordMesh=[4];%nchord1, nchord2
-AC(1).SubSurf(1).type = 1; % 1 = non-control surface, 2 = control surface
 
 %% Vertical tail
+VtailXpos=32;%Vertical tail x position, meter
+VtailYpos=0;%Vertical tail x position, meter
+VtailZpos=2;%Vertical tail z position, meter
 AC(2).Label='Vertical tail';
-AC(2).Config.Proot=[32 0 2];%m (*Vertical tail must input in x-y plane then rotate with dihedral angle)
-AC(2).Config.Ptip=[37 0 7];%m  (*Vertical tail must input in x-y plane then rotate with dihedral angle)
-AC(2).Config.rChord=6;%m
-AC(2).Config.tChord=3;%m
-AC(2).Config.Incidence=0*pi/180;% incidence, radian
-AC(2).Config.Airfoil='flat';% Airfoil file
-AC(2).Config.Dihedral=0*pi/180;% dihedral angle
-AC(2).Config.Dihedral_ref = 2;% = 1 -> rotate around x-axis, = 2 -> rotate around Proot
-AC(2).Config.Symmetry='no';% symmetrical wing
+AC(2).Proot=[VtailXpos VtailYpos VtailZpos];%m
+AC(2).Ptip=[VtailXpos+5 VtailYpos VtailZpos+5];%m
+AC(2).rChord=6;%m
+AC(2).tChord=3;%m
+AC(2).nSpanPanel=8;% no. of spanwise vortex panels
+AC(2).nChordPanel=4;% no. of chordwise vortex panels
+AC(2).Incidence=0*pi/180;% incidence, radian
+AC(2).iRefPt=[VtailXpos VtailYpos VtailZpos];% reference point for incidence angle rotating
+AC(2).Airfoil='flat';% Airfoil file
+AC(2).Dihedral=0*pi/180;% dihedral angle
+AC(2).dRefPt=[0 0 VtailZpos];% % reference point for dihedral angle rotating
+AC(2).Symmetry='no';% symmetrical wing
 
-% Aero Analysis (Gen Panel)   
-AC(2).SubSurf(1).Name='Vertical Tail';% aileron surface
-AC(2).SubSurf(1).SpanData=[0 1 8];% span percentage interval, nspan
-AC(2).SubSurf(1).ChordIntv=[0 1];%chord percentage interval
-AC(2).SubSurf(1).ChordMesh=[4];%nchord1, nchord2
-AC(2).SubSurf(1).type = 1; % 1 = non-control surface, 2 = control surface
 
 %% Horizontal tail
+HtailXpos=37;%Horizontal tail x position, meter
+HtailYpos=0;%Horizontal tail y position, meter
+HtailZpos=7;%Horizontal tail z position, meter
 AC(3).Label='Horizontal tail';
-AC(3).Config.Proot=[37 0 7];%m
-AC(3).Config.Ptip=[40 7 7];%m
-AC(3).Config.rChord=3;%m
-AC(3).Config.tChord=2;%m
-AC(3).Config.Incidence=0*pi/180;% incidence, radian
-AC(3).Config.Airfoil='flat';% Airfoil file
-AC(3).Config.Dihedral=0*pi/180;% dihedral angle
-AC(3).Config.Dihedral_ref = 1;% = 1 -> rotate around x-axis, = 2 -> rotate around Proot
-AC(3).Config.Symmetry='yes';% symmetrical wing
-
-% Aero Analysis (Gen Panel)   
-AC(3).SubSurf(1).Name='Horizontal tail';% aileron surface
-AC(3).SubSurf(1).SpanData=[0 1 8];% span percentage interval, nspan
-AC(3).SubSurf(1).ChordIntv=[0 1];%chord percentage interval
-AC(3).SubSurf(1).ChordMesh=[4];%nchord1, nchord2
-AC(3).SubSurf(1).type = 1; % 1 = non-control surface, 2 = control surface
+AC(3).Proot=[HtailXpos HtailYpos HtailZpos];%m
+AC(3).Ptip=[HtailXpos+3 HtailYpos+7 HtailZpos];%m
+AC(3).rChord=3;%m
+AC(3).tChord=2;%m
+AC(3).nSpanPanel=8;% no. of spanwise vortex panels
+AC(3).nChordPanel=4;% no. of chordwise vortex panels
+AC(3).Incidence=0*pi/180;% incidence, radian
+AC(3).iRefPt=[HtailXpos HtailYpos HtailZpos];% reference point for incidence angle rotating
+AC(3).Airfoil='flat';% Airfoil file
+AC(3).Dihedral=0*pi/180;% dihedral angle
+AC(3).dRefPt=[0 0 HtailZpos];% % reference point for dihedral angle rotating
+AC(3).Symmetry='yes';% symmetrical wing
 
 %% Fuselage
+FuselageXpos=0;%Fuselage tail x position, meter
+FuselageYpos=0;%Fuselage tail y position, meter
+FuselageZpos=0;%Fuselage z position, meter
 AC(4).Label='Fuselage';
-AC(4).Config.Proot=[0 0 0];%m
-AC(4).Config.Ptip=[0 2 0];%m
-AC(4).Config.rChord=40;%m
-AC(4).Config.tChord=40;%m
-AC(4).Config.Incidence=0*pi/180;% incidence, radian
-AC(4).Config.Airfoil='flat';% Airfoil file
-AC(4).Config.Dihedral=0*pi/180;% dihedral angle
-AC(4).Config.Dihedral_ref = 1;% = 1 -> rotate around x-axis, = 2 -> rotate around Proot
-AC(4).Config.Symmetry='yes';% symmetrical wing
-
-% Aero Analysis (Gen Panel)   
-AC(4).SubSurf(1).Name='Fuselage';% aileron surface
-AC(4).SubSurf(1).SpanData=[0 1 1];% span percentage interval, nspan
-AC(4).SubSurf(1).ChordIntv=[0 1];%chord percentage interval
-AC(4).SubSurf(1).ChordMesh=[20];%nchord1, nchord2
-AC(4).SubSurf(1).type = 1; % 1 = non-control surface, 2 = control surface
-
-AcControl = [];
-AcTrim = [];
+AC(4).Proot=[FuselageXpos FuselageYpos FuselageZpos];%m
+AC(4).Ptip=[FuselageXpos FuselageYpos+2 FuselageZpos];%m
+AC(4).rChord=40;%m
+AC(4).tChord=40;%m
+AC(4).nSpanPanel=1;% no. of spanwise vortex panels
+AC(4).nChordPanel=20;% no. of chordwise vortex panels
+AC(4).Incidence=0*pi/180;% incidence, radian
+AC(4).iRefPt=[FuselageXpos FuselageYpos FuselageZpos];% % reference point for dihedral angle rotating
+AC(4).Airfoil='flat';% Airfoil file
+AC(4).Dihedral=0*pi/180;% dihedral angle
+AC(4).dRefPt=[0 0 FuselageZpos];% % reference point for dihedral angle rotating
+AC(4).Symmetry='yes';% symmetrical wing
