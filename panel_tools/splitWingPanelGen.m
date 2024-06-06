@@ -55,8 +55,7 @@ zPanel=interp1(UpperX,CamberZ,xPanel,'linear','extrap');
 % plot(xPanel,zPanel,':xr')
 % pause
 
-Wgm.delXm=delXm;
-Wgm.delXs=delXs;
+Wgm.nChordM=nChordM;
 Wgm.xWing=(xWing-min(xWing))/(max(xWing)-min(xWing));
 Wgm.zWing=zWing/(max(xWing)-min(xWing));
 Wgm.xPanel=(xPanel-min(xPanel))/(max(xPanel)-min(xPanel));
@@ -122,11 +121,6 @@ ProotP=[Wg.Proot(1)+Wg.dXroot Wg.Proot(2:3)];
 PtipW=Wg.Ptip;
 PtipP=[Wg.Ptip(1)+Wg.dXtip Wg.Ptip(2:3)];
 
-% Natee - Fix Hinge position -> move Hinge from structural grid to aerodynamic grid
-pHingeR=[ProotW(1)+Wg.chordRatio*Wg.rChord+Wg.delXm;ProotW(2);ProotW(3)];
-pHingeT=[PtipW(1)+Wg.chordRatio*Wg.tChord+Wg.delXm;PtipW(2);PtipW(3)];
-%
-
 % pHingeR=[ProotW(1)+Wg.chordRatio*Wg.rChord;ProotW(2);ProotW(3)];
 % pHingeT=[PtipW(1)+Wg.chordRatio*Wg.tChord;PtipW(2);PtipW(3)];
 
@@ -144,6 +138,11 @@ for i=1:Wg.nChordPanel
     Xp(i,:)=x0P+Wg.xPanel(i)*chDist;
     Zp(i,:)=ProotP(3)+Wg.zPanel(i)*chDist;
 end
+
+% Natee - Fix Hinge position -> move Hinge from structural grid to aerodynamic grid
+pHingeR=[Xp(Wg.nChordM+1,1);Yp(Wg.nChordM+1,1);Zp(Wg.nChordM+1,1)];
+pHingeT=[Xp(Wg.nChordM+1,end);Yp(Wg.nChordM+1,end);Zp(Wg.nChordM+1,end)];
+%
 
 %Edited swap dihedral and incidence rotation to preven trailing edge separation at root (Natee)
 
