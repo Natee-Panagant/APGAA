@@ -1,4 +1,12 @@
 function panelDat=MappedMeshAeroNew(AC,AcSurf,varargin)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Vortex Lattice and Vortex Ring Panel Mesh Generation %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% *It should be noted that this code is capable for
+% both Vortex Lattice and Vortex Ring Panel generation.
+% Anyways, we only present Vortex Lattice Method (VLM) solver in this work,
+% some variables such as Ring2Lift, WakePanel, and TrailPanel are unused in this solver.
+
 % mode = 1 -> Left side Panel index start from outside
 % Left Panels || Right Panels
 % 13 16 19 22    1 4 7 10
