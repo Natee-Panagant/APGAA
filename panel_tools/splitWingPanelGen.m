@@ -55,6 +55,8 @@ zPanel=interp1(UpperX,CamberZ,xPanel,'linear','extrap');
 % plot(xPanel,zPanel,':xr')
 % pause
 
+Wgm.delXm=delXm;
+Wgm.delXs=delXs;
 Wgm.xWing=(xWing-min(xWing))/(max(xWing)-min(xWing));
 Wgm.zWing=zWing/(max(xWing)-min(xWing));
 Wgm.xPanel=(xPanel-min(xPanel))/(max(xPanel)-min(xPanel));
@@ -82,8 +84,8 @@ pnNum=reshape(1:Wgm.nChordPanel*Wgm.nSpanPanel,Wgm.nChordPanel,Wgm.nSpanPanel);
 subSurfNum=reshape(pnNum(nChordM+1:Wgm.nChordPanel,:),1,...
     Wg.SubSurf(iSurf).ChordMesh*Wgm.nSpanPanel);
 WgOut.RpanelNum=subSurfNum;%sub-surface panel numbers
-WgOut.RHingePt=pHinge;% sub-surface hinge position
-WgOut.RotAxisR=rotAxis;% sub-surface rotating axis
+WgOut.HingePt_R=pHinge;% sub-surface hinge position
+WgOut.RotAxis_R=rotAxis;% sub-surface rotating axis
 
 arrow3dRoundHead(pHinge',pHinge'+rotAxis')
 
@@ -95,23 +97,24 @@ if strcmp(Wg.Symmetry,'yes')
 
     WgOut.LpanelNum=Wgm.nChordPanel*Wgm.nSpanPanel+...
         subSurfNum;
-    WgOut.LHingePt=[pHinge(1) -pHinge(2) pHinge(3)];% sub-surface hinge position
-    WgOut.LotAxisR=[rotAxis(1) -rotAxis(2) rotAxis(3)];% sub-surface rotating axis
-    arrow3dRoundHead(WgOut.LHingePt',WgOut.LHingePt'+WgOut.LotAxisR')
+    WgOut.HingePt_L=[pHinge(1) -pHinge(2) pHinge(3)];% sub-surface hinge position
+    WgOut.RotAxis_L=[rotAxis(1) -rotAxis(2) rotAxis(3)];% sub-surface rotating axis
+    arrow3dRoundHead(WgOut.HingePt_L',WgOut.HingePt_L'+WgOut.RotAxis_L')
 end
 
-% if iSurf==1;sclr=0.7*ones(1,3);else;sclr=0.9*ones(1,3);end
-% mesh(Xw(1:nChordM+1,:),Yw(1:nChordM+1,:),Zw(1:nChordM+1,:),'facecolor','none','EdgeColor','r')
-% surf(Xp(1:nChordM+1,:),Yp(1:nChordM+1,:),Zp(1:nChordM+1,:),'facecolor','g','facealpha',0.75)
-% mesh(Xw(nChordM+1:end,:),Yw(nChordM+1:end,:),Zw(nChordM+1:end,:),'facecolor','none','EdgeColor','b')
-% surf(Xp(nChordM+1:end,:),Yp(nChordM+1:end,:),Zp(nChordM+1:end,:),'facecolor',sclr,'facealpha',0.75)
-% 
-% if strcmp(Wg.Symmetry,'yes')
-%     mesh(Xw(1:nChordM+1,:),-Yw(1:nChordM+1,:),Zw(1:nChordM+1,:),'facecolor','none','EdgeColor','r')
-%     surf(Xp(1:nChordM+1,:),-Yp(1:nChordM+1,:),Zp(1:nChordM+1,:),'facecolor','g','facealpha',0.75)
-%     mesh(Xw(nChordM+1:end,:),-Yw(nChordM+1:end,:),Zw(nChordM+1:end,:),'facecolor','none','EdgeColor','b')
-%     surf(Xp(nChordM+1:end,:),-Yp(nChordM+1:end,:),Zp(nChordM+1:end,:),'facecolor',sclr,'facealpha',0.75)
-% end
+if iSurf==1;sclr=0.7*ones(1,3);else;sclr=0.9*ones(1,3);end
+mesh(Xw(1:nChordM+1,:),Yw(1:nChordM+1,:),Zw(1:nChordM+1,:),'facecolor','none','EdgeColor','r')
+surf(Xp(1:nChordM+1,:),Yp(1:nChordM+1,:),Zp(1:nChordM+1,:),'facecolor','g','edgecolor','none','facealpha',0.75)
+mesh(Xw(nChordM+1:end,:),Yw(nChordM+1:end,:),Zw(nChordM+1:end,:),'facecolor','none','EdgeColor','b')
+surf(Xp(nChordM+1:end,:),Yp(nChordM+1:end,:),Zp(nChordM+1:end,:),'facecolor',sclr,'edgecolor','none','facealpha',0.75)
+
+if strcmp(Wg.Symmetry,'yes')
+    mesh(Xw(1:nChordM+1,:),-Yw(1:nChordM+1,:),Zw(1:nChordM+1,:),'facecolor','none','EdgeColor','r')
+    surf(Xp(1:nChordM+1,:),-Yp(1:nChordM+1,:),Zp(1:nChordM+1,:),'facecolor','g','edgecolor','none','facealpha',0.75)
+    mesh(Xw(nChordM+1:end,:),-Yw(nChordM+1:end,:),Zw(nChordM+1:end,:),'facecolor','none','EdgeColor','b')
+    surf(Xp(nChordM+1:end,:),-Yp(nChordM+1:end,:),Zp(nChordM+1:end,:),'facecolor',sclr,'edgecolor','none','facealpha',0.75)
+end
+0;
 %%%%%%%%%%% sub-functions %%%%%%%%%%%
 function [Xw,Yw,Zw,Xp,Yp,Zp,pHinge,rotAxis]=GenWingGrid(Wg)
 ProotW=Wg.Proot;
@@ -119,8 +122,13 @@ ProotP=[Wg.Proot(1)+Wg.dXroot Wg.Proot(2:3)];
 PtipW=Wg.Ptip;
 PtipP=[Wg.Ptip(1)+Wg.dXtip Wg.Ptip(2:3)];
 
-pHingeR=[ProotW(1)+Wg.chordRatio*Wg.rChord;ProotW(2);ProotW(3)];
-pHingeT=[PtipW(1)+Wg.chordRatio*Wg.tChord;PtipW(2);PtipW(3)];
+% Natee - Fix Hinge position -> move Hinge from structural grid to aerodynamic grid
+pHingeR=[ProotW(1)+Wg.chordRatio*Wg.rChord+Wg.delXm;ProotW(2);ProotW(3)];
+pHingeT=[PtipW(1)+Wg.chordRatio*Wg.tChord+Wg.delXm;PtipW(2);PtipW(3)];
+%
+
+% pHingeR=[ProotW(1)+Wg.chordRatio*Wg.rChord;ProotW(2);ProotW(3)];
+% pHingeT=[PtipW(1)+Wg.chordRatio*Wg.tChord;PtipW(2);PtipW(3)];
 
 Wg.nChordPanel=Wg.nChordPanel+1;% nChord intervals with nChord+1 nodes
 Wg.nSpanPanel=Wg.nSpanPanel+1;% nSpan intervals with nSpan+1 nodes

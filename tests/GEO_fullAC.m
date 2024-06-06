@@ -15,11 +15,11 @@ AC(1).rChord=5;%m
 AC(1).tChord=2;%m
 AC(1).nSpanPanel=10;% no. of spanwise vortex panels
 AC(1).nChordPanel=4;% no. of chordwise vortex panels
+AC(1).Dihedral=0*pi/180;% dihedral angle
+AC(1).dRefPt=[0 0 wingZpos];% % reference point for dihedral angle rotating 
 AC(1).Incidence=0*pi/180;% incidence, radian and rotating point (Proot of surface 1)
 AC(1).iRefPt=[wingXpos wingYpos wingZpos];% reference point for incidence angle rotating
 AC(1).Airfoil='flat';% Airfoil file
-AC(1).Dihedral=0*pi/180;% dihedral angle
-AC(1).dRefPt=[0 0 wingZpos];% % reference point for dihedral angle rotating 
 AC(1).Symmetry='yes';% symmetrical wing
 
 
@@ -34,11 +34,11 @@ AC(2).rChord=6;%m
 AC(2).tChord=3;%m
 AC(2).nSpanPanel=8;% no. of spanwise vortex panels
 AC(2).nChordPanel=4;% no. of chordwise vortex panels
+AC(2).Dihedral=0*pi/180;% dihedral angle
+AC(2).dRefPt=[VtailXpos VtailYpos VtailZpos];% % reference point for dihedral angle rotating
 AC(2).Incidence=0*pi/180;% incidence, radian
 AC(2).iRefPt=[VtailXpos VtailYpos VtailZpos];% reference point for incidence angle rotating
 AC(2).Airfoil='flat';% Airfoil file
-AC(2).Dihedral=0*pi/180;% dihedral angle
-AC(2).dRefPt=[VtailXpos VtailYpos VtailZpos];% % reference point for dihedral angle rotating
 AC(2).Symmetry='no';% symmetrical wing
 
 
@@ -53,11 +53,11 @@ AC(3).rChord=3;%m
 AC(3).tChord=2;%m
 AC(3).nSpanPanel=8;% no. of spanwise vortex panels
 AC(3).nChordPanel=4;% no. of chordwise vortex panels
+AC(3).Dihedral=0*pi/180;% dihedral angle
+AC(3).dRefPt=[0 0 HtailZpos];% % reference point for dihedral angle rotating
 AC(3).Incidence=0*pi/180;% incidence, radian
 AC(3).iRefPt=[HtailXpos HtailYpos HtailZpos];% reference point for incidence angle rotating
 AC(3).Airfoil='flat';% Airfoil file
-AC(3).Dihedral=0*pi/180;% dihedral angle
-AC(3).dRefPt=[0 0 HtailZpos];% % reference point for dihedral angle rotating
 AC(3).Symmetry='yes';% symmetrical wing
 
 %% Fuselage
@@ -71,9 +71,9 @@ AC(4).rChord=40;%m
 AC(4).tChord=40;%m
 AC(4).nSpanPanel=1;% no. of spanwise vortex panels
 AC(4).nChordPanel=20;% no. of chordwise vortex panels
+AC(4).Dihedral=0*pi/180;% dihedral angle
+AC(4).dRefPt=[0 0 FuselageZpos];% % reference point for dihedral angle rotating
 AC(4).Incidence=0*pi/180;% incidence, radian
 AC(4).iRefPt=[FuselageXpos FuselageYpos FuselageZpos];% % reference point for dihedral angle rotating
 AC(4).Airfoil='flat';% Airfoil file
-AC(4).Dihedral=0*pi/180;% dihedral angle
-AC(4).dRefPt=[0 0 FuselageZpos];% % reference point for dihedral angle rotating
 AC(4).Symmetry='yes';% symmetrical wing

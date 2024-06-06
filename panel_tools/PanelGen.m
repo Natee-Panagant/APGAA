@@ -1,4 +1,4 @@
-function [AC,PanelDat,FC]=PanelGen(input_filename)
+function [AC,PanelDat,FC,AcSurf]=PanelGen(input_filename)
 [AC,FC]=feval(input_filename);
 nSurf=size(AC,2);
 
@@ -38,6 +38,13 @@ for i=1:nSurf
             nnode(iSurf)=size(panelDat.Nodes,1);
             npanel(iSurf)=size(panelDat.WingPanel,1);
             nwake(iSurf)=size(panelDat.NodesW,1);
+            
+            %Natee - Store Name of Subsurfs and their panel index
+            PanelDat.SurfName{iSurf}=AC(i).Label;
+            NP1=size(PanelDat.WingPanel,1);
+            NP2=size(panelDat.WingPanel,1);
+            PanelDat.SurfID{iSurf}=(NP1+1):(NP1+NP2);
+            %
 
             PanelDat.Nodes=[PanelDat.Nodes;panelDat.Nodes];
             PanelDat.NodesW=[PanelDat.NodesW;panelDat.NodesW];
@@ -62,13 +69,13 @@ for i=1:nSurf
                     iPanel=sum(npanel(1:iSurf-1));
                     AC(i).SubSurf(iSubSurf(j)).RpanelNum=iPanel+...
                             AcSurf.RpanelNum;
-                    AC(i).SubSurf(iSubSurf(j)).rHingePt=AcSurf.RHingePt;
-                    AC(i).SubSurf(iSubSurf(j)).rRotAxis=AcSurf.RotAxisR;
+                    AC(i).SubSurf(iSubSurf(j)).HingePt_R=AcSurf.HingePt_R;
+                    AC(i).SubSurf(iSubSurf(j)).RotAxis_R=AcSurf.RotAxis_R;
                     if strcmp(AC(i).Symmetry,'yes')
                         AC(i).SubSurf(iSubSurf(j)).LpanelNum=iPanel+...
                             AcSurf.LpanelNum;
-                        AC(i).SubSurf(iSubSurf(j)).lHingePt=AcSurf.LHingePt;
-                        AC(i).SubSurf(iSubSurf(j)).lRotAxis=AcSurf.LotAxisR;
+                        AC(i).SubSurf(iSubSurf(j)).HingePt_L=AcSurf.HingePt_L;
+                        AC(i).SubSurf(iSubSurf(j)).RotAxis_L=AcSurf.RotAxis_L;
                     end
                 end
                 
@@ -78,6 +85,17 @@ for i=1:nSurf
                 nnode(iSurf)=size(panelDat.Nodes,1);
                 npanel(iSurf)=size(panelDat.WingPanel,1);
                 nwake(iSurf)=size(panelDat.NodesW,1);
+                
+                %Natee - Store Name of Subsurfs and their panel index
+                if iSubSurf(j)==0
+                    PanelDat.SurfName{iSurf}=AC(i).Label;
+                else
+                    PanelDat.SurfName{iSurf}=AC(i).SubSurf(iSubSurf(j)).Name;
+                end
+                NP1=size(PanelDat.WingPanel,1);
+                NP2=size(panelDat.WingPanel,1);
+                PanelDat.SurfID{iSurf}=(NP1+1):(NP1+NP2);
+                %
 
                 PanelDat.Nodes=[PanelDat.Nodes;panelDat.Nodes];
                 PanelDat.NodesW=[PanelDat.NodesW;panelDat.NodesW];
@@ -104,7 +122,7 @@ PanelDat.nwake=nwake;
 
 Trl=PanelDat.Ring2Lift;
 nPanel=size(PanelDat.WingPanel,1);
-save PanelTemp Trl nPanel
+% save PanelTemp Trl nPanel
 
 % AC(1).SubSurf(1).RpanelNum
 % AC(1).SubSurf(1).LpanelNum
@@ -122,8 +140,8 @@ save PanelTemp Trl nPanel
 % Colors=['g' 'm' 'g' 'r' 'g' 'r' 'b' 'r'];
 % plotColoredSurfs(PanelDat.Nodes,PanelDat.WingPanel,...
 %     PanelDat.SurfID,Colors,'fill','off','off')
-view(30,70)
-axis equal
+% view(30,70)
+% axis equal
 
 %%%%%%%%% sub-functions %%%%%%%
 function [iInterval,iSubSurf]=getWingSec(AC)
