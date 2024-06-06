@@ -1,4 +1,25 @@
-function panelDat=MappedMeshAeroNew(AC,AcSurf)
+function panelDat=MappedMeshAeroNew(AC,AcSurf,varargin)
+% mode = 1 -> Left side Panel index start from outside
+% Left Panels || Right Panels
+% 13 16 19 22    1 4 7 10
+% 14 17 20 23    2 5 8 11
+% 15 18 21 24    3 6 9 12
+
+% mode = 2 -> Left side Panel index start from inside
+% Left Panels || Right Panels
+% 22 19 16 13    1 4 7 10
+% 23 20 17 14    2 5 8 11
+% 24 21 18 15    3 6 9 12
+
+if numel(varargin)>0
+    mode = varargin{1};
+    if ~(mode ==1 || mode==2)
+        error('incorrect panel index mode input');
+    end
+else
+    mode = 1;
+end
+
 % Grid generation
 x2=AcSurf.Right.Xp;y2=AcSurf.Right.Yp;z2=AcSurf.Right.Zp;
 [nchord,nspan]=size(x2);
@@ -131,7 +152,13 @@ if strcmp(Symmetry,'yes')
     panelDat.delx=[panelDat.delx;panelDat.delx];
     panelDat.dely=[panelDat.dely;panelDat.dely];
     panelDat.S=[panelDat.S;panelDat.S];
-    panelDat.WingPanel=[WingElem;nnode+WingElem];
+    if mode == 1
+        panelDat.WingPanel=[WingElem;nnode+WingElem];
+    elseif mode ==2
+        % flip the mirror panel index -> first element from outside of the left panel
+        idx = reshape(fliplr(reshape(1:npanel,nchord,nspan)),[],1);
+        panelDat.WingPanel=[WingElem;nnode+WingElem(idx,:)];
+    end
     panelDat.WakePanel=[WakeElem;(nwake+1)*(nspan+1)+WakeElem];
     panelDat.TrailPanel=[TrailElem;npanel+TrailElem];
 end

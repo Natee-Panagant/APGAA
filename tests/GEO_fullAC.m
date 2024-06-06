@@ -38,7 +38,7 @@ AC(2).Incidence=0*pi/180;% incidence, radian
 AC(2).iRefPt=[VtailXpos VtailYpos VtailZpos];% reference point for incidence angle rotating
 AC(2).Airfoil='flat';% Airfoil file
 AC(2).Dihedral=0*pi/180;% dihedral angle
-AC(2).dRefPt=[0 0 VtailZpos];% % reference point for dihedral angle rotating
+AC(2).dRefPt=[VtailXpos VtailYpos VtailZpos];% % reference point for dihedral angle rotating
 AC(2).Symmetry='no';% symmetrical wing
 
 

@@ -32,7 +32,7 @@ for i=1:nSurf
         if size(AC(i).SubSurf,2)==0
             iSurf=iSurf+1;
             AcSurf=fullWingPanelGen(AC(i),[0 1]);
-            panelDat=MappedMeshAeroNew(AC(i),AcSurf);
+            panelDat=MappedMeshAeroNew(AC(i),AcSurf,2);%second mode panel index see details in MappedMeshAeroNew.m
 
             nvtx(iSurf)=size(panelDat.VtxPt,1);
             nnode(iSurf)=size(panelDat.Nodes,1);
@@ -72,7 +72,7 @@ for i=1:nSurf
                     end
                 end
                 
-                panelDat=MappedMeshAeroNew(AC(i),AcSurf);
+                panelDat=MappedMeshAeroNew(AC(i),AcSurf,2);%second mode panel index see details in MappedMeshAeroNew.m
 
                 nvtx(iSurf)=size(panelDat.VtxPt,1);
                 nnode(iSurf)=size(panelDat.Nodes,1);
