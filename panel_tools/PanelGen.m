@@ -1,20 +1,5 @@
-function PanelGenNew
-clear all;clc;%close all;
-%[AC,PanelDat]=PanelGenNew(inputfile)
-figure(1),clf,hold on
-addpath(genpath(pwd));
-
-clist = {'fullAC'; %1
-    'flatpanel_5x5'; %2
-    'flatpanel_5x5_sweep'; %3
-    'flatpanel_5x5_dihedral_10'; %4
-    'flatpanel_5x5_dihedral_45'; %5
-    'flatpanel_5x5_vertical'; %6
-    'flatpanel_5x5_dihedral_10_sweep'; %7
-    'near_planar_case'; %8
-    'further_away_case'}; %9
-
-AC=feval(['GEO_' clist{9}]);%feval('AcModel00');
+function [AC,PanelDat,FC]=PanelGen(input_filename)
+[AC,FC]=feval(input_filename);
 nSurf=size(AC,2);
 
 PanelDat.Nodes=[];

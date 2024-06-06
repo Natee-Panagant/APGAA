@@ -29,8 +29,11 @@ for ci = csel
     %%%%%%%%%%%%%%%%%%%%%
     % inHouse - VLM_DLR %
     %%%%%%%%%%%%%%%%%%%%%
-    [AC, PanelDat, FC]=PanelGenNew(['GEO_' cname]);
+    [AC, PanelDat, FC]=PanelGen(['GEO_' cname]);
     
+    % Plot Aerodynamic Panels
+    plot_panel(PanelDat);%temp
+
     % Convert Mesh format
     node = PanelDat.Nodes;
     ele = PanelDat.WingPanel;

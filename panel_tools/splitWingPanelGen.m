@@ -100,18 +100,18 @@ if strcmp(Wg.Symmetry,'yes')
     arrow3dRoundHead(WgOut.LHingePt',WgOut.LHingePt'+WgOut.LotAxisR')
 end
 
-if iSurf==1;sclr=0.7*ones(1,3);else;sclr=0.9*ones(1,3);end
-mesh(Xw(1:nChordM+1,:),Yw(1:nChordM+1,:),Zw(1:nChordM+1,:),'facecolor','none','EdgeColor','r')
-surf(Xp(1:nChordM+1,:),Yp(1:nChordM+1,:),Zp(1:nChordM+1,:),'facecolor','g','facealpha',0.75)
-mesh(Xw(nChordM+1:end,:),Yw(nChordM+1:end,:),Zw(nChordM+1:end,:),'facecolor','none','EdgeColor','b')
-surf(Xp(nChordM+1:end,:),Yp(nChordM+1:end,:),Zp(nChordM+1:end,:),'facecolor',sclr,'facealpha',0.75)
-
-if strcmp(Wg.Symmetry,'yes')
-    mesh(Xw(1:nChordM+1,:),-Yw(1:nChordM+1,:),Zw(1:nChordM+1,:),'facecolor','none','EdgeColor','r')
-    surf(Xp(1:nChordM+1,:),-Yp(1:nChordM+1,:),Zp(1:nChordM+1,:),'facecolor','g','facealpha',0.75)
-    mesh(Xw(nChordM+1:end,:),-Yw(nChordM+1:end,:),Zw(nChordM+1:end,:),'facecolor','none','EdgeColor','b')
-    surf(Xp(nChordM+1:end,:),-Yp(nChordM+1:end,:),Zp(nChordM+1:end,:),'facecolor',sclr,'facealpha',0.75)
-end
+% if iSurf==1;sclr=0.7*ones(1,3);else;sclr=0.9*ones(1,3);end
+% mesh(Xw(1:nChordM+1,:),Yw(1:nChordM+1,:),Zw(1:nChordM+1,:),'facecolor','none','EdgeColor','r')
+% surf(Xp(1:nChordM+1,:),Yp(1:nChordM+1,:),Zp(1:nChordM+1,:),'facecolor','g','facealpha',0.75)
+% mesh(Xw(nChordM+1:end,:),Yw(nChordM+1:end,:),Zw(nChordM+1:end,:),'facecolor','none','EdgeColor','b')
+% surf(Xp(nChordM+1:end,:),Yp(nChordM+1:end,:),Zp(nChordM+1:end,:),'facecolor',sclr,'facealpha',0.75)
+% 
+% if strcmp(Wg.Symmetry,'yes')
+%     mesh(Xw(1:nChordM+1,:),-Yw(1:nChordM+1,:),Zw(1:nChordM+1,:),'facecolor','none','EdgeColor','r')
+%     surf(Xp(1:nChordM+1,:),-Yp(1:nChordM+1,:),Zp(1:nChordM+1,:),'facecolor','g','facealpha',0.75)
+%     mesh(Xw(nChordM+1:end,:),-Yw(nChordM+1:end,:),Zw(nChordM+1:end,:),'facecolor','none','EdgeColor','b')
+%     surf(Xp(nChordM+1:end,:),-Yp(nChordM+1:end,:),Zp(nChordM+1:end,:),'facecolor',sclr,'facealpha',0.75)
+% end
 %%%%%%%%%%% sub-functions %%%%%%%%%%%
 function [Xw,Yw,Zw,Xp,Yp,Zp,pHinge,rotAxis]=GenWingGrid(Wg)
 ProotW=Wg.Proot;
