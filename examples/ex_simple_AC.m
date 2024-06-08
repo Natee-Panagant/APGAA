@@ -18,7 +18,7 @@ AC(1).Ptip=[wingXpos+0.4 wingYpos+10 wingZpos];%m
 AC(1).rChord=1.25;%m
 AC(1).tChord=1.2;%m
 AC(1).nSpanPanel=3;% no. of spanwise vortex panels
-AC(1).nChordPanel=3;% no. of chordwise vortex panels
+AC(1).nChordPanel=4;% no. of chordwise vortex panels
 AC(1).Dihedral=5*pi/180;% dihedral angle
 AC(1).dRefPt=[0 0 wingZpos];% % reference point for dihedral angle rotating
 AC(1).Incidence=3*pi/180;% incidence, radian and rotating point (Proot of surface 1)
@@ -27,13 +27,16 @@ AC(1).Airfoil='flat';% Airfoil file
 AC(1).Symmetry='yes';% symmetrical wing  
 
 AC(1).SubSurf(1).Name='Flap';% flap surface
-AC(1).SubSurf(1).SpanData=[0.1 0.5 4];% span percentage interval, nspan
+AC(1).SubSurf(1).SpanData=[0.1 0.5 1];% span percentage interval, nspan
 AC(1).SubSurf(1).ChordIntv=[0.0 0.7 1.0];%chord percentage interval
-AC(1).SubSurf(1).ChordMesh=2;%nchord1, nchord2
+AC(1).SubSurf(1).ChordMesh=1;%nchord1, nchord2
+AC(1).SubSurf(1).RotAngle=-10*pi/180;%control surface rotation angle
+
 AC(1).SubSurf(2).Name='Aileron';% aileron surface
-AC(1).SubSurf(2).SpanData=[0.6 1.0];% span percentage interval, nspan
+AC(1).SubSurf(2).SpanData=[0.6 1.0 1];% span percentage interval, nspan
 AC(1).SubSurf(2).ChordIntv=[0.0 0.7 1.0];%chord percentage interval
-AC(1).SubSurf(2).ChordMesh=3;%nchord1, nchord2
+AC(1).SubSurf(2).ChordMesh=1;%nchord1, nchord2
+AC(1).SubSurf(2).RotAngle=-10*pi/180;%control surface rotation angle
 
 % Horizontal tail
 HtailXpos=8.5;%Horizontal tail x position, meter
@@ -45,7 +48,7 @@ AC(2).Ptip=[HtailXpos+0.4 HtailYpos+3 HtailZpos];%m
 AC(2).rChord=.75;%m
 AC(2).tChord=0.5;%m
 AC(2).nSpanPanel=4;% no. of spanwise vortex panels
-AC(2).nChordPanel=2;% no. of chordwise vortex panels
+AC(2).nChordPanel=4;% no. of chordwise vortex panels
 AC(2).Dihedral=-5*pi/180;% dihedral angle
 AC(2).dRefPt=[0 0 HtailZpos];% % reference point for dihedral angle rotating
 AC(2).Incidence=-2*pi/180;% incidence, radian
@@ -56,7 +59,8 @@ AC(2).Symmetry='yes';% symmetrical wing
 AC(2).SubSurf(1).Name='Elevator';% aileron surface
 AC(2).SubSurf(1).SpanData=[0.0 1.0 4];% span percentage interval, nspan
 AC(2).SubSurf(1).ChordIntv=[0.0 0.6 1.0];%chord percentage interval
-AC(2).SubSurf(1).ChordMesh=2;%nchord for sub-surface
+AC(2).SubSurf(1).ChordMesh=1;%nchord for sub-surface
+AC(2).SubSurf(1).RotAngle=-10*pi/180;%control surface rotation angle
 
 % Vertical tail
 VtailXpos=8.5;%Vertical tail x position, meter
@@ -79,4 +83,5 @@ AC(3).Symmetry='no';% Non-symmetric wing
 AC(3).SubSurf(1).Name='Rudder';% aileron surface
 AC(3).SubSurf(1).SpanData=[0.5 1.0];% span percentage interval, nspan
 AC(3).SubSurf(1).ChordIntv=[0.0 0.6 1.0];%chord percentage interval
-AC(3).SubSurf(1).ChordMesh=3;%
+AC(3).SubSurf(1).ChordMesh=1;%
+AC(3).SubSurf(1).RotAngle=-10*pi/180;%control surface rotation angle

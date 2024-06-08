@@ -1,5 +1,4 @@
 function [X,Y,Z] = AxisRotating(X,Y,Z,Alpha,AxisVec,RefPt)
-
 ex=AxisVec/sqrt(sum(AxisVec.*AxisVec));
 ux=ex(1);uy=ex(2);uz=ex(3);
 c=cos(Alpha);s=sin(Alpha);

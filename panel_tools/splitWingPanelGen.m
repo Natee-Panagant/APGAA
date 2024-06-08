@@ -82,7 +82,7 @@ Wgm.dRefPt=Wg.dRefPt;
 pnNum=reshape(1:Wgm.nChordPanel*Wgm.nSpanPanel,Wgm.nChordPanel,Wgm.nSpanPanel);
 subSurfNum=reshape(pnNum(nChordM+1:Wgm.nChordPanel,:),1,...
     Wg.SubSurf(iSurf).ChordMesh*Wgm.nSpanPanel);
-WgOut.RpanelNum=subSurfNum;%sub-surface panel numbers
+WgOut.RpanelNum=subSurfNum;%sub-surface (control surface) panel numbers
 WgOut.HingePt_R=pHinge;% sub-surface hinge position
 WgOut.RotAxis_R=rotAxis;% sub-surface rotating axis
 
@@ -93,25 +93,64 @@ WgOut.Right.Xp=Xp;WgOut.Right.Yp=Yp;WgOut.Right.Zp=Zp;
 if strcmp(Wg.Symmetry,'yes')
     WgOut.Left.Xw=Xw;WgOut.Left.Yw=-Yw;WgOut.Left.Zw=Zw;
     WgOut.Left.Xp=Xp;WgOut.Left.Yp=-Yp;WgOut.Left.Zp=Zp;
-
-    WgOut.LpanelNum=Wgm.nChordPanel*Wgm.nSpanPanel+...
-        subSurfNum;
+    WgOut.LpanelNum=Wgm.nChordPanel*Wgm.nSpanPanel+subSurfNum;
     WgOut.HingePt_L=[pHinge(1) -pHinge(2) pHinge(3)];% sub-surface hinge position
     WgOut.RotAxis_L=[rotAxis(1) -rotAxis(2) rotAxis(3)];% sub-surface rotating axis
     arrow3dRoundHead(WgOut.HingePt_L',WgOut.HingePt_L'+WgOut.RotAxis_L')
 end
 
+switch Wg.SubSurf(iSurf).Name
+    case 'Flap'
+        if WgOut.RotAxis_R(2)>0 %Rotation Axis of the Right-side Flap pointing inward (To the Left)
+            WgOut.HingePt_R=WgOut.HingePt_R+WgOut.RotAxis_R;
+            WgOut.RotAxis_R=-WgOut.RotAxis_R;
+        end
+        if strcmp(Wg.Symmetry,'yes')
+            if WgOut.RotAxis_L(2)>0 %Rotation Axis of the Right-side Flap pointing inward (To the Left)
+                WgOut.HingePt_L=WgOut.HingePt_L+WgOut.RotAxis_L;
+                WgOut.RotAxis_L=-WgOut.RotAxis_L;%Rotation Axis of the Left-side Flap pointing outward (flip + inverse Y)
+            end
+        end
+    case 'Aileron'
+        if WgOut.RotAxis_R(2)<0 %Rotation Axis of the Right-side wing pointing outward (To the Right)
+            WgOut.HingePt_R=WgOut.HingePt_R+WgOut.RotAxis_R;
+            WgOut.RotAxis_R=-WgOut.RotAxis_R;
+        end
+        if strcmp(Wg.Symmetry,'yes')
+            if WgOut.RotAxis_L(2)>0 %Rotation Axis of the Left-side wing pointing outward (inverse Y) (To the Left)
+                WgOut.HingePt_L=WgOut.HingePt_L+WgOut.RotAxis_L;
+                WgOut.RotAxis_L=-WgOut.RotAxis_L;
+            end
+        end
+    case 'Elevator'
+        if WgOut.RotAxis_R(2)>0 %Rotation Axis of the Right-side elevator pointing inward (To the Left)
+            WgOut.HingePt_R=WgOut.HingePt_R+WgOut.RotAxis_R;
+            WgOut.RotAxis_R=-WgOut.RotAxis_R;
+        end
+        if strcmp(Wg.Symmetry,'yes')
+            if WgOut.RotAxis_L(2)>0 %Rotation Axis of the Left-side elevator pointing outward (flip + inverse Y) (To the Left)
+                WgOut.HingePt_L=WgOut.HingePt_L+WgOut.RotAxis_L;
+                WgOut.RotAxis_L=-WgOut.RotAxis_L;
+            end
+        end
+    case 'Rudder'
+        if WgOut.RotAxis_R(3)<0 %Rotation Axis of the rudder is pointing upward
+            WgOut.HingePt_R=WgOut.HingePt_R+WgOut.RotAxis_R;
+            WgOut.RotAxis_R=-WgOut.RotAxis_R;
+        end
+end
+
 if iSurf==1;sclr=0.7*ones(1,3);else;sclr=0.9*ones(1,3);end
 mesh(Xw(1:nChordM+1,:),Yw(1:nChordM+1,:),Zw(1:nChordM+1,:),'facecolor','none','EdgeColor','r')
-surf(Xp(1:nChordM+1,:),Yp(1:nChordM+1,:),Zp(1:nChordM+1,:),'facecolor','g','edgecolor','none','facealpha',0.75)
+surf(Xp(1:nChordM+1,:),Yp(1:nChordM+1,:),Zp(1:nChordM+1,:),'facecolor','g','edgecolor','k','facealpha',0.75)
 mesh(Xw(nChordM+1:end,:),Yw(nChordM+1:end,:),Zw(nChordM+1:end,:),'facecolor','none','EdgeColor','b')
-surf(Xp(nChordM+1:end,:),Yp(nChordM+1:end,:),Zp(nChordM+1:end,:),'facecolor',sclr,'edgecolor','none','facealpha',0.75)
+surf(Xp(nChordM+1:end,:),Yp(nChordM+1:end,:),Zp(nChordM+1:end,:),'facecolor',sclr,'edgecolor','k','facealpha',0.75)
 
 if strcmp(Wg.Symmetry,'yes')
     mesh(Xw(1:nChordM+1,:),-Yw(1:nChordM+1,:),Zw(1:nChordM+1,:),'facecolor','none','EdgeColor','r')
-    surf(Xp(1:nChordM+1,:),-Yp(1:nChordM+1,:),Zp(1:nChordM+1,:),'facecolor','g','edgecolor','none','facealpha',0.75)
+    surf(Xp(1:nChordM+1,:),-Yp(1:nChordM+1,:),Zp(1:nChordM+1,:),'facecolor','g','edgecolor','k','facealpha',0.75)
     mesh(Xw(nChordM+1:end,:),-Yw(nChordM+1:end,:),Zw(nChordM+1:end,:),'facecolor','none','EdgeColor','b')
-    surf(Xp(nChordM+1:end,:),-Yp(nChordM+1:end,:),Zp(nChordM+1:end,:),'facecolor',sclr,'edgecolor','none','facealpha',0.75)
+    surf(Xp(nChordM+1:end,:),-Yp(nChordM+1:end,:),Zp(nChordM+1:end,:),'facecolor',sclr,'edgecolor','k','facealpha',0.75)
 end
 0;
 %%%%%%%%%%% sub-functions %%%%%%%%%%%

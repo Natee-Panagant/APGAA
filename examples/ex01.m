@@ -13,7 +13,7 @@ format shortEng
 %Generate Aerodynamic Panel
 
 %temp debug
-% figure(99);clf;hold on;
+figure(99);clf;hold on;
 %
 
 
@@ -57,6 +57,6 @@ disp(['Fy_total = ' num2str(F_VLM_total(2),'%1.2f')]);
 disp(['Fz_total = ' num2str(F_VLM_total(3),'%1.2f')]);
 
 % Plot results
-plot_panel(PanelDat,AC);
+plot_panel(PanelDat);
 % plot_Cp(PanelDat,Cp_VLM);
 % plot_Cp(PanelDat,Cp_DLM,State.k);

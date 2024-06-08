@@ -69,12 +69,12 @@ if strcmp(Wg.Symmetry,'yes')
     WgOut.Left.Xw=Xw;WgOut.Left.Yw=-Yw;WgOut.Left.Zw=Zw;
     WgOut.Left.Xp=Xp;WgOut.Left.Yp=-Yp;WgOut.Left.Zp=Zp;
 end
-% mesh(Xw,Yw,Zw,'facecolor','none','EdgeColor','r')
-% surf(Xp,Yp,Zp,'facecolor','g','facealpha',0.75)
-% if strcmp(Wg.Symmetry,'yes')
-%     mesh(Xw,-Yw,Zw,'facecolor','none','EdgeColor','r')
-%     surf(Xp,-Yp,Zp,'facecolor','g','facealpha',0.75)
-% end
+mesh(Xw,Yw,Zw,'facecolor','none','EdgeColor','r')
+surf(Xp,Yp,Zp,'facecolor','g','facealpha',0.75)
+if strcmp(Wg.Symmetry,'yes')
+    mesh(Xw,-Yw,Zw,'facecolor','none','EdgeColor','r')
+    surf(Xp,-Yp,Zp,'facecolor','g','facealpha',0.75)
+end
 %%%%%%%%%%% sub-functions %%%%%%%%%%%
 function [Xw,Yw,Zw,Xp,Yp,Zp]=GenWingGrid(Wg)
 dXroot=0.25*Wg.rChord/Wg.nChordPanel;% leading root vortex ring position
