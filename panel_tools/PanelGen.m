@@ -24,8 +24,8 @@ for i=1:nSurf
     iLabel1=strcmp({AC(i).Label}, 'Wing');%Wing
     iLabel2=strcmp({AC(i).Label}, 'Horizontal tail');%Horizontal tail
     iLabel3=strcmp({AC(i).Label}, 'Vertical tail');%Vertical tail
-    iLabel4=strcmp({AC(i).Label}, 'Fuselage');%Fuselage
-    if iLabel1||iLabel2||iLabel3||iLabel4
+    
+    if iLabel1||iLabel2||iLabel3
         %% Natee fix error for input without SubSurf (no control surfaces)
         if ~isfield(AC(i),'SubSurf')
             AC(i).SubSurf=[];
@@ -184,8 +184,6 @@ PanelDat.nwake=nwake;
 Trl=PanelDat.Ring2Lift;
 nPanel=size(PanelDat.WingPanel,1);
 
-% figure(999);clf;hold on;
-% plot3(PanelDat.Nodes(:,1),PanelDat.Nodes(:,2),PanelDat.Nodes(:,3),'k.');
 % Rotate Control-Surfaces %Natee
 if PanelDat.RotAngle{i}~=0
     for i=1:numel(PanelDat.RotAngle)
@@ -200,9 +198,6 @@ if PanelDat.RotAngle{i}~=0
             RefPt=PanelDat.HingePt{i}';
             [X,Y,Z] = AxisRotating(X0,Y0,Z0,Alpha,AxisVec,RefPt);
             PanelDat.Nodes(nidx,:)=[X,Y,Z];
-%             plot3(PanelDat.Nodes(:,1),PanelDat.Nodes(:,2),PanelDat.Nodes(:,3),'ro');
-            plot3(X0,Y0,Z0,'ko',X,Y,Z,'rx');
-            0;
         end
     end
 end

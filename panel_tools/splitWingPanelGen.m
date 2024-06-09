@@ -86,7 +86,7 @@ WgOut.RpanelNum=subSurfNum;%sub-surface (control surface) panel numbers
 WgOut.HingePt_R=pHinge;% sub-surface hinge position
 WgOut.RotAxis_R=rotAxis;% sub-surface rotating axis
 
-arrow3dRoundHead(pHinge',pHinge'+rotAxis')
+% arrow3dRoundHead(pHinge',pHinge'+rotAxis')
 
 WgOut.Right.Xw=Xw;WgOut.Right.Yw=Yw;WgOut.Right.Zw=Zw;
 WgOut.Right.Xp=Xp;WgOut.Right.Yp=Yp;WgOut.Right.Zp=Zp;
@@ -96,7 +96,7 @@ if strcmp(Wg.Symmetry,'yes')
     WgOut.LpanelNum=Wgm.nChordPanel*Wgm.nSpanPanel+subSurfNum;
     WgOut.HingePt_L=[pHinge(1) -pHinge(2) pHinge(3)];% sub-surface hinge position
     WgOut.RotAxis_L=[rotAxis(1) -rotAxis(2) rotAxis(3)];% sub-surface rotating axis
-    arrow3dRoundHead(WgOut.HingePt_L',WgOut.HingePt_L'+WgOut.RotAxis_L')
+%     arrow3dRoundHead(WgOut.HingePt_L',WgOut.HingePt_L'+WgOut.RotAxis_L')
 end
 
 switch Wg.SubSurf(iSurf).Name
@@ -140,19 +140,19 @@ switch Wg.SubSurf(iSurf).Name
         end
 end
 
-if iSurf==1;sclr=0.7*ones(1,3);else;sclr=0.9*ones(1,3);end
-mesh(Xw(1:nChordM+1,:),Yw(1:nChordM+1,:),Zw(1:nChordM+1,:),'facecolor','none','EdgeColor','r')
-surf(Xp(1:nChordM+1,:),Yp(1:nChordM+1,:),Zp(1:nChordM+1,:),'facecolor','g','edgecolor','k','facealpha',0.75)
-mesh(Xw(nChordM+1:end,:),Yw(nChordM+1:end,:),Zw(nChordM+1:end,:),'facecolor','none','EdgeColor','b')
-surf(Xp(nChordM+1:end,:),Yp(nChordM+1:end,:),Zp(nChordM+1:end,:),'facecolor',sclr,'edgecolor','k','facealpha',0.75)
-
-if strcmp(Wg.Symmetry,'yes')
-    mesh(Xw(1:nChordM+1,:),-Yw(1:nChordM+1,:),Zw(1:nChordM+1,:),'facecolor','none','EdgeColor','r')
-    surf(Xp(1:nChordM+1,:),-Yp(1:nChordM+1,:),Zp(1:nChordM+1,:),'facecolor','g','edgecolor','k','facealpha',0.75)
-    mesh(Xw(nChordM+1:end,:),-Yw(nChordM+1:end,:),Zw(nChordM+1:end,:),'facecolor','none','EdgeColor','b')
-    surf(Xp(nChordM+1:end,:),-Yp(nChordM+1:end,:),Zp(nChordM+1:end,:),'facecolor',sclr,'edgecolor','k','facealpha',0.75)
-end
-0;
+% if iSurf==1;sclr=0.7*ones(1,3);else;sclr=0.9*ones(1,3);end
+% mesh(Xw(1:nChordM+1,:),Yw(1:nChordM+1,:),Zw(1:nChordM+1,:),'facecolor','none','EdgeColor','r')
+% surf(Xp(1:nChordM+1,:),Yp(1:nChordM+1,:),Zp(1:nChordM+1,:),'facecolor','g','edgecolor','k','facealpha',0.75)
+% mesh(Xw(nChordM+1:end,:),Yw(nChordM+1:end,:),Zw(nChordM+1:end,:),'facecolor','none','EdgeColor','b')
+% surf(Xp(nChordM+1:end,:),Yp(nChordM+1:end,:),Zp(nChordM+1:end,:),'facecolor',sclr,'edgecolor','k','facealpha',0.75)
+% 
+% if strcmp(Wg.Symmetry,'yes')
+%     mesh(Xw(1:nChordM+1,:),-Yw(1:nChordM+1,:),Zw(1:nChordM+1,:),'facecolor','none','EdgeColor','r')
+%     surf(Xp(1:nChordM+1,:),-Yp(1:nChordM+1,:),Zp(1:nChordM+1,:),'facecolor','g','edgecolor','k','facealpha',0.75)
+%     mesh(Xw(nChordM+1:end,:),-Yw(nChordM+1:end,:),Zw(nChordM+1:end,:),'facecolor','none','EdgeColor','b')
+%     surf(Xp(nChordM+1:end,:),-Yp(nChordM+1:end,:),Zp(nChordM+1:end,:),'facecolor',sclr,'edgecolor','k','facealpha',0.75)
+% end
+% 0;
 %%%%%%%%%%% sub-functions %%%%%%%%%%%
 function [Xw,Yw,Zw,Xp,Yp,Zp,pHinge,rotAxis]=GenWingGrid(Wg)
 ProotW=Wg.Proot;
