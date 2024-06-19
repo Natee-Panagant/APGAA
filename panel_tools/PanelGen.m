@@ -35,7 +35,7 @@ for i=1:nSurf
         if size(AC(i).SubSurf,2)==0 && numel(AC(i).nSpanPanel)>0
             iSurf=iSurf+1;
             AcSurf=fullWingPanelGen(AC(i),[0 1]);
-            panelDat=MappedMeshAeroNew(AC(i),AcSurf,2);%second mode panel index see details in MappedMeshAeroNew.m
+            panelDat=MappedMeshAero(AC(i),AcSurf,2);%second mode panel index see details in MappedMeshAero.m
 
             nvtx(iSurf)=size(panelDat.VtxPt,1);
             nnode(iSurf)=size(panelDat.Nodes,1);
@@ -74,7 +74,7 @@ for i=1:nSurf
                 iSurf=iSurf+1;
                 if iSubSurf(j)==0
                     AcSurf=fullWingPanelGen(AC(i),[iInterval(j) iInterval(j+1)]);
-                    panelDat=MappedMeshAeroNew(AC(i),AcSurf,2);%second mode panel index see details in MappedMeshAeroNew.m
+                    panelDat=MappedMeshAero(AC(i),AcSurf,2);%second mode panel index see details in MappedMeshAero.m
                     if init==0
                         k=k+1;
                         SSName{k}=AC(i).Label;
@@ -96,7 +96,7 @@ for i=1:nSurf
                         AC(i).SubSurf(iSubSurf(j)).HingePt_L=AcSurf.HingePt_L;
                         AC(i).SubSurf(iSubSurf(j)).RotAxis_L=AcSurf.RotAxis_L;
                     end
-                    panelDat=MappedMeshAeroNew(AC(i),AcSurf,2);%second mode panel index see details in MappedMeshAeroNew.m
+                    panelDat=MappedMeshAero(AC(i),AcSurf,2);%second mode panel index see details in MappedMeshAero.m
                     if numel(AcSurf.RpanelNum)<size(panelDat.WingPanel,1) && init==0
                         k=k+1;
                         SSName{k}=AC(i).Label;
