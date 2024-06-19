@@ -207,7 +207,7 @@ ele = PanelDat.WingPanel; % Node indices of all aerodynamic panels (size = Numbe
 
 % Generate Horse Shoes Panel Data
 panel_vr = mesh2panel(node,ele);
-[Sc,Sm,Si,So,S,pspan,pchord,normvec]=lattice_setup2(panel_vr);
+[Sc,Sm,Si,So,S,pspan,pchord,normvec]=lattice_setup(panel_vr);
 
 %%%%%%%%% sub-functions %%%%%%%
 function [iInterval,iSubSurf]=getWingSec(AC)
