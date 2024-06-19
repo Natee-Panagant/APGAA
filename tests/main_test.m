@@ -29,16 +29,7 @@ for ci = csel
     %%%%%%%%%%%%%%%%%%%%%
     % inHouse - VLM_DLR %
     %%%%%%%%%%%%%%%%%%%%%
-    [AC, PanelDat, FC]=PanelGen(['GEO_' cname]);
-
-    % Convert Mesh format
-    node = PanelDat.Nodes;
-    ele = PanelDat.WingPanel;
-    Npanel = size(ele,1);
-
-    % Generate Horse Shoes Panel Data
-    panel_vr = mesh2panel(node,ele);
-    [Sc,Sm,Si,So,S,pspan,pchord,normvec]=lattice_setup2(panel_vr);
+    [PanelDat,FC,Sc,Sm,Si,So,S,pspan,pchord,normvec] = PanelGen(['GEO_' cname]);
 
     disp(repmat('%',1,60));
     disp(' ');

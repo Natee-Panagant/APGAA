@@ -11,25 +11,7 @@ addpath(genpath(main_dir));
 format shortEng
 
 %Generate Aerodynamic Panel
-
-%temp debug
-figure(99);clf;hold on;
-%
-
-
-[AC, PanelDat, FC] = PanelGen('ex_simple_AC'); % Panel generation -> Input a string of input filename which is 'ex_simple_wing' in this case
-M = FC.M; % Mach number
-Qinf = FC.Qinf; % 3D Velocity vector (size = 1 x 3)
-rho_air = FC.rho_air; % Air density
-
-% Convert Mesh format
-node = PanelDat.Nodes; % 3D Node position of all aerodynamic panels (size = Number_of_nodes x 3)
-ele = PanelDat.WingPanel; % Node indices of all aerodynamic panels (size = Number_of_panels x 4)
-Npanel = size(ele,1); % Number of panels
-
-% Generate Horse Shoes Panel Data
-panel_vr = mesh2panel(node,ele);
-[Sc,Sm,Si,So,S,pspan,pchord,normvec]=lattice_setup2(panel_vr);
+[PanelDat,FC,Sc,Sm,Si,So,S,pspan,pchord,normvec] = PanelGen('ex_simple_AC'); % Panel generation -> Input a string of input filename which is 'ex_simple_wing' in this case
 
 % Vortex Lattice Method (VLM)
 [D0,A,GAMMA,RHS,qxV,qyV,qzV,F_VLM]=VLM(FC.M,FC.Qinf,FC.rho_air,Sc,Sm,Si,So,S,pspan,normvec);

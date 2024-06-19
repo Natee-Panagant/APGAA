@@ -1,4 +1,4 @@
-function [AC,PanelDat,FC,AcSurf]=PanelGen(input_filename)
+function [PanelDat,FC,Sc,Sm,Si,So,S,pspan,pchord,normvec] = PanelGen(input_filename)
 [AC,FC]=feval(input_filename);
 nSurf=size(AC,2);
 
@@ -24,14 +24,15 @@ for i=1:nSurf
     iLabel1=strcmp({AC(i).Label}, 'Wing');%Wing
     iLabel2=strcmp({AC(i).Label}, 'Horizontal tail');%Horizontal tail
     iLabel3=strcmp({AC(i).Label}, 'Vertical tail');%Vertical tail
-    
-    if iLabel1||iLabel2||iLabel3
+    iLabel4=strcmp({AC(i).Label}, 'Fuselage');%Vertical tail
+
+    if iLabel1||iLabel2||iLabel3||iLabel4
         %% Natee fix error for input without SubSurf (no control surfaces)
         if ~isfield(AC(i),'SubSurf')
             AC(i).SubSurf=[];
         end
         %%
-        if size(AC(i).SubSurf,2)==0
+        if size(AC(i).SubSurf,2)==0 && isfield(AC(i),'nSpanPanel')
             iSurf=iSurf+1;
             AcSurf=fullWingPanelGen(AC(i),[0 1]);
             panelDat=MappedMeshAeroNew(AC(i),AcSurf,2);%second mode panel index see details in MappedMeshAeroNew.m
@@ -40,12 +41,12 @@ for i=1:nSurf
             nnode(iSurf)=size(panelDat.Nodes,1);
             npanel(iSurf)=size(panelDat.WingPanel,1);
             nwake(iSurf)=size(panelDat.NodesW,1);
-            
+
             %Natee - Store Name of Sub-Surfaces and their panel index
             iSS=iSS+1;
             NPi=size(panelDat.WingPanel,1);
             PanelDat.SurfName{iSS}=AC(i).Label; %Name of all sub-surfaces
-            PanelDat.SurfPanelID{iSS}=sum(npanel(1:iSurf-1))+1:NPi;
+            PanelDat.SurfPanelID{iSS}=sum(npanel(1:iSurf-1))+1:sum(npanel(1:iSurf-1))+NPi;
             PanelDat.HingePt{iSS}=[];%neglect for non-control surface
             PanelDat.HingeAxis{iSS}=[];%neglect for non-control surface
             PanelDat.RotAngle{iSS}=[];%neglect for non-control surface
@@ -105,7 +106,7 @@ for i=1:nSurf
                         SSRotAngle{k}=[];%neglect for non-control surface
                         init=1;
                     end
-                    
+
                     if strcmp(AC(i).Symmetry,'yes')
                         k=k+1;
                         SSName{k}=[AC(i).SubSurf(iSubSurf(j)).Name '_R'];
@@ -113,7 +114,7 @@ for i=1:nSurf
                         SSHingePt{k}=AcSurf.HingePt_R;%Hinge Point
                         SSHingeAxis{k}=AcSurf.RotAxis_R;%Hinge Axis
                         SSRotAngle{k}=AC(i).SubSurf(iSubSurf(j)).RotAngle;%Rotation angle of control surfaces
-                        
+
                         k=k+1;
                         SSName{k}=[AC(i).SubSurf(iSubSurf(j)).Name '_L'];
                         SSPidx{k} = iPanel+AcSurf.LpanelNum;
@@ -130,7 +131,7 @@ for i=1:nSurf
                     end
                     NPi=NPi+size(panelDat.WingPanel,1);
                 end
-                
+
                 nvtx(iSurf)=size(panelDat.VtxPt,1);
                 nnode(iSurf)=size(panelDat.Nodes,1);
                 npanel(iSurf)=size(panelDat.WingPanel,1);
@@ -185,44 +186,28 @@ Trl=PanelDat.Ring2Lift;
 nPanel=size(PanelDat.WingPanel,1);
 
 % Rotate Control-Surfaces %Natee
-if PanelDat.RotAngle{i}~=0
-    for i=1:numel(PanelDat.RotAngle)
-        if PanelDat.RotAngle{i}~=0
-            eidx=PanelDat.SurfPanelID{i};
-            nidx=unique(reshape(PanelDat.WingPanel(eidx,:),[],1));
-            X0=PanelDat.Nodes(nidx,1);
-            Y0=PanelDat.Nodes(nidx,2);
-            Z0=PanelDat.Nodes(nidx,3);
-            Alpha=PanelDat.RotAngle{i};
-            AxisVec=PanelDat.HingeAxis{i}';
-            RefPt=PanelDat.HingePt{i}';
-            [X,Y,Z] = AxisRotating(X0,Y0,Z0,Alpha,AxisVec,RefPt);
-            PanelDat.Nodes(nidx,:)=[X,Y,Z];
-        end
+for i=1:numel(PanelDat.RotAngle)
+    if PanelDat.RotAngle{i}~=0
+        eidx=PanelDat.SurfPanelID{i};
+        nidx=unique(reshape(PanelDat.WingPanel(eidx,:),[],1));
+        X0=PanelDat.Nodes(nidx,1);
+        Y0=PanelDat.Nodes(nidx,2);
+        Z0=PanelDat.Nodes(nidx,3);
+        Alpha=PanelDat.RotAngle{i};
+        AxisVec=PanelDat.HingeAxis{i}';
+        RefPt=PanelDat.HingePt{i}';
+        [X,Y,Z] = AxisRotating(X0,Y0,Z0,Alpha,AxisVec,RefPt);
+        PanelDat.Nodes(nidx,:)=[X,Y,Z];
     end
 end
-%
 
-% save PanelTemp Trl nPanel
+% Convert Mesh format
+node = PanelDat.Nodes; % 3D Node position of all aerodynamic panels (size = Number_of_nodes x 3)
+ele = PanelDat.WingPanel; % Node indices of all aerodynamic panels (size = Number_of_panels x 4)
 
-% AC(1).SubSurf(1).RpanelNum
-% AC(1).SubSurf(1).LpanelNum
-% AC(1).SubSurf(2).RpanelNum
-% AC(1).SubSurf(2).LpanelNum
-% 
-% AC(2).SubSurf(1).RpanelNum
-% AC(2).SubSurf(1).LpanelNum
-% 
-% AC(3).SubSurf(1).RpanelNum
-
-
-% plotPanel(PanelDat.Nodes,PanelDat.WingPanel,'fill','g','off','on')
-% plotPanel(PanelDat.NodesW,PanelDat.WakePanel,'fill','c','off','on')
-% Colors=['g' 'm' 'g' 'r' 'g' 'r' 'b' 'r'];
-% plotColoredSurfs(PanelDat.Nodes,PanelDat.WingPanel,...
-%     PanelDat.SurfID,Colors,'fill','off','off')
-% view(30,70)
-% axis equal
+% Generate Horse Shoes Panel Data
+panel_vr = mesh2panel(node,ele);
+[Sc,Sm,Si,So,S,pspan,pchord,normvec]=lattice_setup2(panel_vr);
 
 %%%%%%%%% sub-functions %%%%%%%
 function [iInterval,iSubSurf]=getWingSec(AC)
@@ -234,11 +219,10 @@ iInterval=sort(unique(iInterval));
 for i=1:(length(iInterval)-1)
     iSubSurf(i)=0;% no flap
     for j=1:size(AC.SubSurf,2)
-        if AC.SubSurf(j).SpanData(1)==iInterval(i)&AC.SubSurf(j).SpanData(2)==iInterval(i+1)
+        if AC.SubSurf(j).SpanData(1)==iInterval(i) && AC.SubSurf(j).SpanData(2)==iInterval(i+1)
             iSubSurf(i)=j;
             break
         end
     end
 end
 %%%%%%%%%% End of file %%%%%%%%%%
-    
