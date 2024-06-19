@@ -40,7 +40,7 @@ for ci = csel
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     % VLM Evaluation of the current code %
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    [D0,A,GAMMA,RHS,qxV,qyV,qzV,F_VLM]=VLM(FC.M,FC.Qinf,FC.rho_air,Sc,Sm,Si,So,S,pspan,normvec);
+    [D0,A,GAMMA,RHS,qxV,qyV,qzV,F_VLM,M_VLM]=VLM(FC.rG,FC.M,FC.Qinf,FC.rho_air,Sc,Sm,Si,So,S,pspan,normvec);
     wj = (FC.Qinf(1)*normvec(:,1)+FC.Qinf(2)*normvec(:,2)+FC.Qinf(3)*normvec(:,3))/norm(FC.Qinf);
 
     Ajj_VLM=D0;

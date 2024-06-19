@@ -14,7 +14,7 @@ format shortEng
 [PanelDat,FC,Sc,Sm,Si,So,S,pspan,pchord,normvec] = PanelGen('AcModel02'); % Panel generation -> Input a string of input filename which is 'ex_simple_wing' in this case
 
 % Vortex Lattice Method (VLM)
-[D0,A,GAMMA,RHS,qxV,qyV,qzV,F_VLM]=VLM(FC.M,FC.Qinf,FC.rho_air,Sc,Sm,Si,So,S,pspan,normvec);
+[D0,A,GAMMA,RHS,qxV,qyV,qzV,F_VLM,M_VLM]=VLM(FC.rG,FC.M,FC.Qinf,FC.rho_air,Sc,Sm,Si,So,S,pspan,normvec);
 wj = (FC.Qinf(1)*normvec(:,1)+FC.Qinf(2)*normvec(:,2)+FC.Qinf(3)*normvec(:,3))/norm(FC.Qinf);
 
 % Calculate Cp of steady part
@@ -34,10 +34,13 @@ for i = 1:Nk
 end
 
 F_VLM_total = sum(F_VLM,1);
+M_VLM_total = sum(M_VLM,1);
 disp(['Fx_total = ' num2str(F_VLM_total(1),'%1.2f')]);
 disp(['Fy_total = ' num2str(F_VLM_total(2),'%1.2f')]);
 disp(['Fz_total = ' num2str(F_VLM_total(3),'%1.2f')]);
-
+disp(['Mx_total = ' num2str(M_VLM_total(1),'%1.2f')]);
+disp(['My_total = ' num2str(M_VLM_total(2),'%1.2f')]);
+disp(['Mz_total = ' num2str(M_VLM_total(3),'%1.2f')]);
 % Plot results
 plot_panel(PanelDat);
 % plot_Cp(PanelDat,Cp_VLM);

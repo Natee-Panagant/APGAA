@@ -1,28 +1,29 @@
-function [D0,A,GAMMA,RHS,qxV,qyV,qzV,F] = VLM(Mach,Q,rho,Sc,Sm,Si,So,S,pspan,normvec)
+function [D0,A,GAMMA,RHS,qxV,qyV,qzV,F,M] = VLM(rG,Mach,Q,rho,Sc,Sm,Si,So,S,pspan,normvec)
 %%%%%%%%%%%%%%%%%%%%%%%%%
 % Vortex Lattice Method %
 %%%%%%%%%%%%%%%%%%%%%%%%%
-npanel=size(Sc,1);
+npanel = size(Sc,1);
 % rho=beam_model0.Aero.state.rho; %Air density
-beta=sqrt(1-Mach^2); %Prandtl-Glauert correction to include compressibility effect
+beta = sqrt(1-Mach^2); %Prandtl-Glauert correction to include compressibility effect
 
 
 % Find Induce Velocity
-A=Aassem(Sc,Si,So,normvec,beta);
-[~,IV,VortexD]=Aassem(Sm,Si,So,normvec,beta);
+A = Aassem(Sc,Si,So,normvec,beta);
+[~,IV,VortexD] = Aassem(Sm,Si,So,normvec,beta);
 
-RHS=-sum(Q.*normvec,2);
-GAMMA=A\RHS;
+RHS = -sum(Q.*normvec,2);
+GAMMA = A\RHS;
 
 qxV = IV(:,:,1);
 qyV = IV(:,:,2);
 qzV = IV(:,:,3);
 %
-Vx=IV(:,:,1)*GAMMA;
-Vy=IV(:,:,2)*GAMMA;
-Vz=IV(:,:,3)*GAMMA;
-Vflow=Q+[Vx,Vy,Vz];
-F=rho*cross(Vflow,VortexD,2).*repmat(GAMMA,1,3);
+Vx = IV(:,:,1)*GAMMA;
+Vy = IV(:,:,2)*GAMMA;
+Vz = IV(:,:,3)*GAMMA;
+Vflow = Q+[Vx,Vy,Vz];
+F = rho*cross(Vflow,VortexD,2).*repmat(GAMMA,1,3);
+M = cross(Sm-rG,F,2);
 
 %Calculate D0 for VLM convergence mode in DLM for better accuracy at zero reduced frequency (k=0)
 D0 = A*diag(S./pspan/2); % For mapping Angle of Attack (AoA) to Pressure Coefficient (Cp) *-> 0.5*panel_area/panel_span (0.5*A/b) in DLR_DLM formulation
@@ -126,7 +127,7 @@ end
 
 function plot_panel(xyz,Sind,Mind,Lind,Tind,wake)
 figure;clf;hold on;
-for i=1:size(xyz,1)
+for i = 1:size(xyz,1)
     x=xyz(i,:,1);
     y=xyz(i,:,2);
     z=xyz(i,:,3);
@@ -153,7 +154,7 @@ for i=1:size(xyz,1)
     text(mean(x),mean(y),mean(z),num2str(i));
 end
 if numel(wake)>0
-    for i=1:size(wake,1)
+    for i = 1:size(wake,1)
         x=wake(i,:,1);
         y=wake(i,:,2);
         z=wake(i,:,3);

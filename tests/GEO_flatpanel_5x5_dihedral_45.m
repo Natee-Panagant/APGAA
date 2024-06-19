@@ -3,6 +3,7 @@ FC.Qinf = [274.4*cosd(5) 0 274.4*sind(5)];% Velocity [Vx Vy Vz] for static loadi
 FC.rho_air = 1.225;%kg/m^3
 FC.M = 0.8;% Mach number
 FC.k = [0.001 0.6 1.4]; %Nastran reduce frequencies (omega*Uinf/semichord)
+FC.rG = [0 0 0];%Reference point for moment caculation
 
 %% Wing section 1 horizontal
 wingXpos=0;%wing x position, meter
