@@ -11,7 +11,7 @@ addpath(genpath(main_dir));
 format shortEng
 
 %Generate Aerodynamic Panel
-[PanelDat,FC,Sc,Sm,Si,So,S,pspan,pchord,normvec] = PanelGen('ex_simple_AC'); % Panel generation -> Input a string of input filename which is 'ex_simple_wing' in this case
+[PanelDat,FC,Sc,Sm,Si,So,S,pspan,pchord,normvec] = PanelGen('AcModel02'); % Panel generation -> Input a string of input filename which is 'ex_simple_wing' in this case
 
 % Vortex Lattice Method (VLM)
 [D0,A,GAMMA,RHS,qxV,qyV,qzV,F_VLM]=VLM(FC.M,FC.Qinf,FC.rho_air,Sc,Sm,Si,So,S,pspan,normvec);

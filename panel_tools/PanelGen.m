@@ -32,7 +32,7 @@ for i=1:nSurf
             AC(i).SubSurf=[];
         end
         %%
-        if size(AC(i).SubSurf,2)==0 && isfield(AC(i),'nSpanPanel')
+        if size(AC(i).SubSurf,2)==0 && numel(AC(i).nSpanPanel)>0
             iSurf=iSurf+1;
             AcSurf=fullWingPanelGen(AC(i),[0 1]);
             panelDat=MappedMeshAeroNew(AC(i),AcSurf,2);%second mode panel index see details in MappedMeshAeroNew.m
