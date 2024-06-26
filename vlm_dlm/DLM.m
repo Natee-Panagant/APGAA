@@ -1,18 +1,22 @@
-function Dij=DLM(Pc,Pi,Pm,Po,M,k,N,pspan,pchord,varargin)
-%Using I1/I2 Integral formulation from
-%DLR-IB-AE-GO-2020-137
-%An Implementation of the Vortex Lattice and the Doublt Lattice Method Version 1.04
-%Arne VoB
-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% developed by: Natee Panagant                       %
+%      Address: Department of Mechanical Engineering %
+%               Faculty of Engineering               %
+%               Khon Kaen University                 %
+%               Thailand                             %
+%               40002                                %
+%        Email: natepa@kku.ac.th                     %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+function Dij = DLM(Sc,Si,Sm,So,M,k,pchord,varargin)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Dmatrix calculation with Doublet Lattice Method (DLM) %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % This code support both planar and non-planar panel.
 %
 %
-%       Pc = 3D collocation points, the 3/4 chord as displayed below
+%       Sc = 3D collocation points, the 3/4 chord as displayed below
 %            (Array -> Size = Number_of_Panels * 3)
-% Pi,Pm,Po = 3D doublet points, the 1/4 of chord as displayed below
+% Si,Sm,So = 3D doublet points, the 1/4 of chord as displayed below
 %            (Array -> Size = Number_of_Panels * 3)
 %        M = Mach number (Scalar)
 %        b = Semi chord length (Scalar)
@@ -24,22 +28,17 @@ function Dij=DLM(Pc,Pi,Pm,Po,M,k,N,pspan,pchord,varargin)
 %            (Array -> Size = Number_of_Panels * Number_of_Panels)
 %
 %               __   __   __   __
-%              |  Po             |
+%              |  So             |
 %              |                 |
-% Uinf --->    |  Pm        Pc   |
+% Uinf --->    |  Sm        Sc   |
 %              |                 |
-%  ^y-axis     |__Pi __   __   __|
+%  ^y-axis     |__Si __   __   __|
 %  |           0  1/4  1/2  3/4  1
 %  |-->x-axis
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% developed by: Natee Panagant                       %
-%      Address: Department of Mechanical Engineering %
-%               Faculty of Engineering               %
-%               Khon Kaen University                 %
-%               Thailand                             %
-%               40002                                %
-%        Email: natepa@kku.ac.th                     %
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Formulation of DLM is employed from [1]
+% [1] Arne VoB - An Implementation of the Vortex Lattice and the Doublt Lattice Method Version 1.04 (DLR-IB-AE-GO-2020-137)
+%
 
 if numel(varargin{1})>0
     D0 = varargin{1};%Include VLM convergence
@@ -48,7 +47,7 @@ else
     VLM_conv_flag = false;
 end
 % Preparing array data for vectorized computation
-Np = size(Pc,1);    % Number of panels
+Np = size(Sc,1);    % Number of panels
 Nk = numel(k);     % Number of reduced frequencies
 NM = numel(M);      % Number of Mach numbers
 beta2 = 1-M^2;
@@ -58,20 +57,20 @@ delx = repmat(pchord',Np,1);
 % *Receiving panel data is equal in each row  %
 % *Sending panel data is equal in each column %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-e = repmat(0.5*sqrt(((Po(:,3)-Pi(:,3)).^2+(Po(:,2)-Pi(:,2)).^2))',Np,1);
+e = repmat(0.5*sqrt(((So(:,3)-Si(:,3)).^2+(So(:,2)-Si(:,2)).^2))',Np,1);
 e2 = e.^2;
 e3 = e.^3;
 e4 = e.^4;
 e_2 = 0.5*e;
 e0 = zeros(size(e));
 
-xsr = Pc(:,1) - Pm(:,1)';
-ysr = Pc(:,2) - Pm(:,2)';
-zsr = Pc(:,3) - Pm(:,3)';
+xsr = Sc(:,1) - Sm(:,1)';
+ysr = Sc(:,2) - Sm(:,2)';
+zsr = Sc(:,3) - Sm(:,3)';
 
-sin_gamma = (Po(:,3)-Pi(:,3))'./(2*e); %gamma is dihedral angle of each panel
-cos_gamma = (Po(:,2)-Pi(:,2))'./(2*e);
-tan_lambda = (Po(:,1)-Pi(:,1))'./(2*e);%lambda is sweep angle of each panel (%NeoCASS will fix the sweep angle variation dues to dihedral with different equation)
+sin_gamma = (So(:,3)-Si(:,3))'./(2*e); %gamma is dihedral angle of each panel
+cos_gamma = (So(:,2)-Si(:,2))'./(2*e);
+tan_lambda = (So(:,1)-Si(:,1))'./(2*e);%lambda is sweep angle of each panel (%NeoCASS will fix the sweep angle variation dues to dihedral with different equation)
 gamma = asin(sin_gamma);
 gamma_sr = gamma-gamma';
 

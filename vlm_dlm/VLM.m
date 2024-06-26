@@ -1,23 +1,27 @@
-function [D0,A,GAMMA,RHS,qxV,qyV,qzV,F,M] = VLM(rG,Mach,Q,rho,Sc,Sm,Si,So,S,pspan,normvec)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% developed by: Natee Panagant                       %
+%      Address: Department of Mechanical Engineering %
+%               Faculty of Engineering               %
+%               Khon Kaen University                 %
+%               Thailand                             %
+%               40002                                %
+%        Email: natepa@kku.ac.th                     %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+function [D0,A,GAMMA,F,M] = VLM(rG,Mach,Q,rho,Sc,Sm,Si,So,S,pspan,normvec)
 %%%%%%%%%%%%%%%%%%%%%%%%%
 % Vortex Lattice Method %
 %%%%%%%%%%%%%%%%%%%%%%%%%
-npanel = size(Sc,1);
-% rho=beam_model0.Aero.state.rho; %Air density
+% Formulation of DLM is employed from [1]
+% [1] Arne VoB - An Implementation of the Vortex Lattice and the Doublt Lattice Method Version 1.04 (DLR-IB-AE-GO-2020-137)
 beta = sqrt(1-Mach^2); %Prandtl-Glauert correction to include compressibility effect
-
 
 % Find Induce Velocity
 A = Aassem(Sc,Si,So,normvec,beta);
 [~,IV,VortexD] = Aassem(Sm,Si,So,normvec,beta);
 
-RHS = -sum(Q.*normvec,2);
-GAMMA = A\RHS;
+W = -sum(Q.*normvec,2);
+GAMMA = A\W;
 
-qxV = IV(:,:,1);
-qyV = IV(:,:,2);
-qzV = IV(:,:,3);
-%
 Vx = IV(:,:,1)*GAMMA;
 Vy = IV(:,:,2)*GAMMA;
 Vz = IV(:,:,3)*GAMMA;
@@ -27,8 +31,6 @@ M = cross(Sm-rG,F,2);
 
 %Calculate D0 for VLM convergence mode in DLM for better accuracy at zero reduced frequency (k=0)
 D0 = A*diag(S./pspan/2); % For mapping Angle of Attack (AoA) to Pressure Coefficient (Cp) *-> 0.5*panel_area/panel_span (0.5*A/b) in DLR_DLM formulation
-% D00 = A.*repmat((S./pspan/2)',npanel,1);
-% sum(sum(abs(D0-D00)))
 end
 
 %%%%%%%%%%%%%%%%
@@ -123,45 +125,4 @@ IV = zeros(npanel,npanel,3);
 IV(:,:,1) = D_x;
 IV(:,:,2) = D_y;
 IV(:,:,3) = D_z;
-end
-
-function plot_panel(xyz,Sind,Mind,Lind,Tind,wake)
-figure;clf;hold on;
-for i = 1:size(xyz,1)
-    x=xyz(i,:,1);
-    y=xyz(i,:,2);
-    z=xyz(i,:,3);
-    plot3(x,y,z,'k-');
-    if numel(Mind)>0
-        if Mind(i)
-            po=plot3(mean(x),mean(y),mean(z),'kd','markerfacecolor','k','markersize',4);
-            if Tind(i)
-                set(po,'markerfacecolor','r','markersize',4);
-            elseif Lind(i)
-                set(po,'markerfacecolor','g','markersize',4);
-            end
-        end
-    elseif numel(Sind)>0
-        if Sind(i)
-            po=plot3(mean(x),mean(y),mean(z),'ko','markerfacecolor','b','markersize',4);
-            if Tind(i)
-                set(po,'markerfacecolor','r','markersize',4);
-            elseif Lind(i)
-                set(po,'markerfacecolor','g','markersize',4);
-            end
-        end
-    end
-    text(mean(x),mean(y),mean(z),num2str(i));
-end
-if numel(wake)>0
-    for i = 1:size(wake,1)
-        x=wake(i,:,1);
-        y=wake(i,:,2);
-        z=wake(i,:,3);
-        plot3(x,y,z,'g-');
-        text(mean(x),mean(y),mean(z),num2str(i));
-    end
-end
-axis equal
-view(-30,40);
 end

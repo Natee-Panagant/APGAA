@@ -40,27 +40,27 @@ for ci = csel
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     % VLM Evaluation of the current code %
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    [D0,A,GAMMA,RHS,qxV,qyV,qzV,F_VLM,M_VLM]=VLM(FC.rG,FC.M,FC.Qinf,FC.rho_air,Sc,Sm,Si,So,S,pspan,normvec);
-    wj = (FC.Qinf(1)*normvec(:,1)+FC.Qinf(2)*normvec(:,2)+FC.Qinf(3)*normvec(:,3))/norm(FC.Qinf);
+    [D0,A,GAMMA,F_VLM,M_VLM] = VLM(FC.rG,FC.M,FC.Qinf,FC.rho_air,Sc,Sm,Si,So,S,pspan,normvec);
+    W = (FC.Qinf(1)*normvec(:,1)+FC.Qinf(2)*normvec(:,2)+FC.Qinf(3)*normvec(:,3))/norm(FC.Qinf);
 
-    Ajj_VLM=D0;
+    Ajj_VLM = D0;
     Qjj_VLM = -inv(Ajj_VLM);
-    Cp_VLM = Qjj_VLM*wj;
+    Cp_VLM = Qjj_VLM*W;
 
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     % DLM Evaluation of the current code %
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    D=DLM(Sc,Si,Sm,So,FC.M,FC.k,normvec,pspan,pchord,D0);
-    wj = (FC.Qinf(1)*normvec(:,1)+FC.Qinf(2)*normvec(:,2)+FC.Qinf(3)*normvec(:,3))/norm(FC.Qinf);
+    D = DLM(Sc,Si,Sm,So,FC.M,FC.k,pchord,D0);
+    W = (FC.Qinf(1)*normvec(:,1)+FC.Qinf(2)*normvec(:,2)+FC.Qinf(3)*normvec(:,3))/norm(FC.Qinf);
 
     Qjj_DLM1 = -inv(D{1,1});
-    Cp_DLM1 = Qjj_DLM1*wj;
+    Cp_DLM1 = Qjj_DLM1*W;
 
     Qjj_DLM2 = -inv(D{1,2});
-    Cp_DLM2 = Qjj_DLM2*wj;
+    Cp_DLM2 = Qjj_DLM2*W;
 
     Qjj_DLM3 = -inv(D{1,3});
-    Cp_DLM3 = Qjj_DLM3*wj;
+    Cp_DLM3 = Qjj_DLM3*W;
     
     % Load reference validated VLM+DLM results
     load(['rst_' clist{ci} '.mat']);
@@ -123,7 +123,7 @@ disp(repmat('*',1,60));
 disp(' ');
 if sum(err_idx)>0
     disp('found error in following cases:');
-    for ci=1:numel(err_idx)
+    for ci = 1:numel(err_idx)
         if err_idx(ci)>0
             disp(clist{ci});
         end
