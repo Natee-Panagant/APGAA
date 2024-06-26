@@ -1,17 +1,20 @@
-function plot_panel(PanelDat)
+function plot_panel(PanelDat,wake_flag)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Plot Aerodynamic Panels %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
 clrl = get_color_list;
-
-% Plot Aerodynamic Panels
 figure(1);clf;hold on;
 node = PanelDat.Nodes;
 ele = PanelDat.WingPanel;
 Nsurf = numel(PanelDat.SurfPanelID);
 SurfName=PanelDat.SurfName;
+% Get the surface list
 for i=1:Nsurf
     if strcmp(SurfName{i}(end-1:end),'_R') || strcmp(SurfName{i}(end-1:end),'_L')
         SurfName{i}(end-1:end)=[];
     end
 end
+% Set panel colors
 c=0;
 for i=1:Nsurf
     dup_idx = find( ismember(SurfName,SurfName{i})==1);
@@ -27,25 +30,32 @@ for i=1:Nsurf
         clr_idx(i)=c;
     end
 end
-
+% Plot each part with different color
 for i=1:numel(PanelDat.SurfPanelID)
     id = PanelDat.SurfPanelID{i};
-    x = [node(ele(id,1),1) , node(ele(id,2),1) , node(ele(id,3),1) , node(ele(id,4),1) , node(ele(id,1),1)]';
-    y = [node(ele(id,1),2) , node(ele(id,2),2) , node(ele(id,3),2) , node(ele(id,4),2) , node(ele(id,1),2)]';
-    z = [node(ele(id,1),3) , node(ele(id,2),3) , node(ele(id,3),3) , node(ele(id,4),3) , node(ele(id,1),3)]';
-    patch(x,y,z,zeros(size(x)),'facecolor',clrl{clr_idx(i)},'facealpha',0.5);
+    xyz = mesh2panel(node,ele(id,:));
+    patch(xyz(:,:,1)',xyz(:,:,2)',xyz(:,:,3)',0,'facecolor',clrl{clr_idx(i)},'facealpha',0.5);
     if numel(PanelDat.HingePt{i})>0
         for j=1:size(PanelDat.HingePt{i},1)
             arrow3dRoundHead(PanelDat.HingePt{i}(j,:)',PanelDat.HingePt{i}(j,:)'+PanelDat.HingeAxis{i}(j,:)')
         end
     end
 end
+% Plot wakes
+if wake_flag == 1
+    nodew = PanelDat.NodesW;
+    elew = PanelDat.WakePanel;
+    xyz = mesh2panel(nodew,elew);
+    patch(xyz(:,:,1)',xyz(:,:,2)',xyz(:,:,3)',0,'facecolor',[.5 .5 .5],'facealpha',0.5);
+end
 title('Aerodynamic Panels');
 axis equal;
 view(-30,30);
 end
 
-% Sub-Function
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%% Sub-Functions %%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 function clrl = get_color_list()
 clrl = {"#FF0000"
         "#00FF00"
