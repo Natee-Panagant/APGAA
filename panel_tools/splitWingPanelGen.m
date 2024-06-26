@@ -184,5 +184,3 @@ if Wg.Incidence ~= 0
 end
 pHinge = pHingeR';
 rotAxis = pHingeT'-pHingeR';
-
-

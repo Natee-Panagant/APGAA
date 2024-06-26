@@ -46,4 +46,3 @@ dels = 0.5*(P1(:,2:3)+P4(:,2:3))-0.5*(P2(:,2:3)+P3(:,2:3));
 pspan = sqrt(dels(:,1).^2+dels(:,2).^2);% Panel span
 pchord = abs(S./pspan);% Panel chord
 end
-

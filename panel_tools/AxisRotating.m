@@ -20,4 +20,3 @@ for i = 1:size(X,1)
         Z(i,j) = RijPrime(3);
     end
 end
-

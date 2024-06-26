@@ -104,4 +104,3 @@ if Wg.Incidence ~= 0
     [Xw,Yw,Zw] = AxisRotating(Xw,Yw,Zw,Wg.Incidence,[0;1;0],Wg.iRefPt');
     [Xp,Yp,Zp] = AxisRotating(Xp,Yp,Zp,Wg.Incidence,[0;1;0],Wg.iRefPt');
 end
-
