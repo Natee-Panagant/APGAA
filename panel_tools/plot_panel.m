@@ -1,7 +1,12 @@
-function plot_panel(PanelDat,wake_flag)
+function plot_panel(PanelDat,varargin)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Plot Aerodynamic Panels %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%
+if numel(varargin) > 0
+    wake_flag = varargin{1};
+else
+    wake_flag = 0;
+end
 clrl = get_color_list;
 figure(1);clf;hold on;
 node = PanelDat.Nodes;
