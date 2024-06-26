@@ -56,6 +56,7 @@ end
 title('Aerodynamic Panels');
 axis equal;
 view(-30,30);
+set(gcf,'windowstate','maximize');
 end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

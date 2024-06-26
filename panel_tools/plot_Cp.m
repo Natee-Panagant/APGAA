@@ -18,10 +18,12 @@ switch mode
     case 1 %VLM plot
         figure;clf;hold on;
         fill3(x,y,z,Cp');
+        colormap('jet');
+        colorbar;
         title(['VLM - Cp']);
         axis equal;
         view(-30,30);
-
+        set(gcf,'windowstate','maximize');
     case 2 %DLM plot
         Nk = numel(Cp);
         for i = 1:Nk
@@ -29,14 +31,20 @@ switch mode
 
             subplot(1,2,1);
             fill3(x,y,z,real(Cp{i})');
+            colormap('jet');
+            colorbar;
             title(['DLM - Magnitude of Cp @k = ' num2str(k(1))]);
             axis equal;
             view(-30,30);
+            set(gcf,'windowstate','maximize');
 
             subplot(1,2,2);
             fill3(x,y,z,imag(Cp{i})');
+            colormap('jet');
+            colorbar;
             title(['DLM - Phase of Cp @k = ' num2str(k(1))]);
             axis equal;
             view(-30,30);
+            set(gcf,'windowstate','maximize');
         end
 end

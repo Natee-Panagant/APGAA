@@ -43,5 +43,5 @@ disp(['My_total = ' num2str(M_VLM_total(2),'%1.2f')]);
 disp(['Mz_total = ' num2str(M_VLM_total(3),'%1.2f')]);
 % Plot results
 plot_panel(PanelDat);
-% plot_Cp(PanelDat,Cp_VLM);
-% plot_Cp(PanelDat,Cp_DLM,State.k);
+plot_Cp(PanelDat,Cp_VLM);
+plot_Cp(PanelDat,Cp_DLM,FC.k);
