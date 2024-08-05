@@ -51,7 +51,7 @@ for i=1:numel(PanelDat.SurfPanelID)
         for j=1:size(PanelDat.HingePt{i},1)
             %% xxx
             % arrow3dRoundHead(PanelDat.HingePt{i}(j,:)',PanelDat.HingePt{i}(j,:)'+PanelDat.HingeAxis{i}(j,:)')
-            arrowobj(i,j) = arrow3dRoundHead_update(PanelDat.HingePt{i}(j,:)',PanelDat.HingePt{i}(j,:)'+PanelDat.HingeAxis{i}(j,:)');
+            arrowobj(i,j) = arrow3dRoundHead(PanelDat.HingePt{i}(j,:)',PanelDat.HingePt{i}(j,:)'+PanelDat.HingeAxis{i}(j,:)');
             set(arrowobj(i,j),'Tag',['Arrow' '_' PanelDat.SurfName{i}]);
             %
         end
