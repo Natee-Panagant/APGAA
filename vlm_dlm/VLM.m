@@ -9,11 +9,18 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 function [D0,A,GAMMA,F,M] = VLM(rG,Mach,Q,rho,Sc,Sm,Si,So,S,pspan,normvec)
 %%%%%%%%%%%%%%%%%%%%%%%%%
-% Vortex Lattice Method %
+%               Vortex Lattice Method               %
 %%%%%%%%%%%%%%%%%%%%%%%%%
-% Formulation of DLM is employed from [1]
-% [1] Arne VoB - An Implementation of the Vortex Lattice and the Doublt Lattice Method Version 1.04 (DLR-IB-AE-GO-2020-137)
-beta = sqrt(1-Mach^2); %Prandtl-Glauert correction to include compressibility effect
+
+%## Implementation
+% - Voﬂ [1] 
+% - Kotikalpudi [2,3] public available VLM
+%
+%## Formulation and derivation of VLM
+% - Katz and Plotkin [4]
+
+beta = sqrt(1-Mach^2); % Prandtl-Glauert correction to include compressibility effect
+% beta suggested by [5] Hedman
 
 % Find Induce Velocity
 A = Aassem(Sc,Si,So,normvec,beta);
@@ -39,6 +46,14 @@ end
 function [A,IV,VortexD]=Aassem(C,Si,So,normvec,beta)
 npanel = size(C,1);
 tol = 1e-6;
+
+%%%%%%%%%%%%%%%%%%%%%%%%%
+%## Implementation
+% - Voﬂ [1] 
+%## Formulation and derivation
+% - Katz and Plotkin [4]
+%%%%%%%%%%%%%%%%%%%%%%%%%
+
 % Apply compressibility effect (Prandtl Glauert)
 Si(:,1) = Si(:,1)/beta;
 So(:,1) = So(:,1)/beta;
@@ -77,6 +92,7 @@ dot_r0r2 = r0_x.*r2_x + r0_y.*r2_y + r0_z.*r2_z;
 D1_x = cross_r1r2_x.*(dot_r0r1./abs_r1 - dot_r0r2./abs_r2)./(4*pi*abs_cross_r1r2_p2);
 D1_y = cross_r1r2_y.*(dot_r0r1./abs_r1 - dot_r0r2./abs_r2)./(4*pi*abs_cross_r1r2_p2);
 D1_z = cross_r1r2_z.*(dot_r0r1./abs_r1 - dot_r0r2./abs_r2)./(4*pi*abs_cross_r1r2_p2);
+
 % Handle singular cases of D1
 singular_idx1 = abs_r1<=tol | abs_r2<=tol | abs_cross_r1r2_p2<=tol;
 D1_x(singular_idx1) = 0;
@@ -126,3 +142,16 @@ IV(:,:,1) = D_x;
 IV(:,:,2) = D_y;
 IV(:,:,3) = D_z;
 end
+
+
+%%
+% References 
+% [1] Voﬂ, A. (2020). An Implementation of the Vortex Lattice and the Doublet Lattice Method [Monograph]. https://github.com/DLR-AE/PanelAero
+% [2] Kotikalpudi, A. (2014). Body Freedom Flutter (BFF) Doublet Lattice Method (DLM). https://hdl.handle.net/11299/165566
+% [3] Kotikalpudi, A., Pfifer, H., & Balas, G. J. (2015). Unsteady Aerodynamics Modeling for a Flexible Unmanned Air Vehicle. In AIAA Atmospheric Flight Mechanics Conference (1ñ0). American Institute of Aeronautics and Astronautics. https://doi.org/10.2514/6.2015-2854
+% [4] Katz, J., & Plotkin, A. (2001). Low-Speed Aerodynamics (2nd ed.). Cambridge University Press. https://doi.org/10.1017/CBO9780511810329
+% [5] Hedman, S. G. (1966). Vortex lattice method for calculation of quasi steady state loadings on thin elastic wings in subsonic flow. Flygtekniska forsoksanstalten.
+
+
+
+
