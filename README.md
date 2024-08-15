@@ -1,10 +1,12 @@
 Aircraft Panel Generation and Aerodynamic Analysis (APGAA)
+
 APGAA is a MATLAB-based software designed for aerodynamic analysis using the Vortex Lattice Method (VLM) and Doublet Lattice Method (DLM). The solvers in APGAA are derived from the PanelAero software [1], which has been validated against Nastran, ensuring accuracy and reliability. For ease of implementation, APGAA has been validated directly against PanelAero, and several test cases demonstrate that APGAA produces results in perfect agreement with PanelAero.
 
 Key Features:
 Aerodynamic Model Generation: APGAA can generate aerodynamic models for the entire aircraft, including both lifting and stabilizing surfaces, as well as control surfaces.
 Control Surface Analysis: The software allows for the adjustment of control surface angles to compute maneuver loadings.
 Aerodynamic Influence Coefficient (AIC): APGAA calculates the AIC, which can be used for dynamic aeroelastic analysis.
+
 Validation:
 APGAA has been rigorously tested and validated against PanelAero, with all test cases showing perfect matches. This ensures that users can trust the accuracy of the aerodynamic analysis performed by the software.
 
