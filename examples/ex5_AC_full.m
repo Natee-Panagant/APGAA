@@ -17,12 +17,12 @@ FC.k = [0 0.001 0.6 1.4]; %Nastran reduce frequencies (omega*Uinf/semichord)
 %%
 % Wing
 wingXpos = 3; %wing x position, meter
-wingYpos = 0.6;%wing y position, meter
+wingYpos = 0;%wing y position, meter
 wingZpos = -0.4;%wing z position, meter
 
 AC(1).Label = 'Wing';
 AC(1).Proot = [wingXpos wingYpos wingZpos];%m
-AC(1).Ptip = [wingXpos+0.4 wingYpos+10 wingZpos];%m
+AC(1).Ptip = [wingXpos+0.4 wingYpos+5 wingZpos];%m
 
 AC(1).rChord = 1.25;    %m
 AC(1).tChord = 1.2;      %m
