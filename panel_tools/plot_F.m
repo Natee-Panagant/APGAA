@@ -1,6 +1,12 @@
-function [gobj,qobj] = plot_F(PanelDat,F,varargin)
+function [gobj,qobj] = plot_F(rst)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Plot Aerodynamic Loadings %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-gobji = plot_panel(PanelDat);
+PanelDat = rst.PanelDat;
+F = rst.F_VLM;
+
+gobji = plot_panel(rst);
 P = PanelDat.VtxPt;
 
 hold on
@@ -35,6 +41,9 @@ xlabel('Xaxis (m)')
 ylabel('Yaxis (m)')
 zlabel('Zaxis (m)')
 axis equal;
+view(-45,45);
+set(gcf,'windowstate','maximize');
+
 box on
 grid on
 

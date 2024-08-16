@@ -1,12 +1,12 @@
-function gobj = plot_panel(PanelDat,varargin)
+function gobj = plot_panel(rst)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Plot Aerodynamic Panels %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%
-if numel(varargin) > 0
-    wake_flag = varargin{1};
-else
-    wake_flag = 0;
-end
+
+PanelDat = rst.PanelDat;
+
+wake_flag = 0;
+
 clrl = get_color_list;
 figure; hold on;
 node = PanelDat.Nodes;
@@ -88,8 +88,8 @@ if wake_flag == 1
 end
 
 % title('Aerodynamic Panels');
-% axis equal;
-% view(-30,30);
+axis equal;
+view(-45,45);
 set(gcf,'windowstate','maximize');
 
 xlabel('Xaxis (m)')

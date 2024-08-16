@@ -8,7 +8,7 @@ FC.Qinf = [10*cosd(3) 0 10*sind(3)];% Velocity for static loadings, m/s
 FC.rho_air = 1.20;% kg/m^3
 FC.M = 0.5;% Mach number
 FC.rG = [1.00 0 0];% center of mass
-FC.k = [0 0.001 0.6 1.4]; %Nastran reduce frequencies (omega*Uinf/semichord)
+FC.k = [0.001 0.6 1.4]; %Nastran reduce frequencies (omega*Uinf/semichord)
 
 
 %%
