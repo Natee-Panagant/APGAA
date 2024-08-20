@@ -74,16 +74,16 @@ AC(2).SubSurf(1).RotAngle=-10*pi/180;%control surface rotation angle
 
 % Vertical tail
 VtailXpos = 8.5;%Vertical tail x position, meter
-VtailYpos = 0.5;%Vertical tail x position, meter
+VtailYpos = 0.0;%Vertical tail x position, meter
 VtailZpos = 0.25;%Vertical tail z position, meter
 AC(3).Label = 'Vertical tail';
 AC(3).Proot = [VtailXpos VtailYpos VtailZpos];%m
-AC(3).Ptip = [VtailXpos+0.4 VtailYpos+2.5 VtailZpos];%m
+AC(3).Ptip = [VtailXpos+0.4 VtailYpos VtailZpos+2.5];%m
 AC(3).rChord = .75;%m
 AC(3).tChord = 0.5;%m
 AC(3).nSpanPanel = 4;% no. of spanwise vortex panels
 AC(3).nChordPanel = 4;% no. of chordwise vortex panels
-AC(3).Dihedral = 90*pi/180;% dihedral angle
+AC(3).Dihedral = 0*pi/180;% dihedral angle
 AC(3).dRefPt = [0 0 VtailZpos];% % reference point for dihedral angle rotating
 AC(3).Incidence = 0*pi/180;% incidence, radian
 AC(3).iRefPt = [VtailXpos VtailYpos VtailZpos];% reference point for incidence angle rotating
