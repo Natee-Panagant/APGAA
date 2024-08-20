@@ -7,4 +7,4 @@ clc;
 % Adding sub-folder to MATLAB path
 addpath(fullfile(APGAA_path,'examples'))
 addpath(fullfile(APGAA_path,'panel_tools'))
-addpath(fullfile(APGAA_path,'vlm_dlm'))
+addpath(fullfile(APGAA_path,'solver'))
