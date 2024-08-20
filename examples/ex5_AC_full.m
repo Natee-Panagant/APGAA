@@ -49,7 +49,7 @@ AC(1).SubSurf(2).RotAngle=-10*pi/180;%control surface rotation angle
 
 % Horizontal tail
 HtailXpos=8.5;%Horizontal tail x position, meter
-HtailYpos=0.5;%Horizontal tail y position, meter
+HtailYpos=0;%Horizontal tail y position, meter
 HtailZpos=0.25;%Horizontal tail z position, meter
 
 AC(2).Label='Horizontal tail';
@@ -75,7 +75,7 @@ AC(2).SubSurf(1).RotAngle=-10*pi/180;%control surface rotation angle
 % Vertical tail
 VtailXpos = 8.5;%Vertical tail x position, meter
 VtailYpos = 0.5;%Vertical tail x position, meter
-VtailZpos = 0.0;%Vertical tail z position, meter
+VtailZpos = 0.25;%Vertical tail z position, meter
 AC(3).Label = 'Vertical tail';
 AC(3).Proot = [VtailXpos VtailYpos VtailZpos];%m
 AC(3).Ptip = [VtailXpos+0.4 VtailYpos+2.5 VtailZpos];%m
