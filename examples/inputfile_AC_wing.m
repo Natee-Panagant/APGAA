@@ -1,4 +1,4 @@
-function [AC,FC] = ex1_AC_wing
+function [AC,FC] = inputfile_AC_wing
 
 %% 
 

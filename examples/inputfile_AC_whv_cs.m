@@ -1,4 +1,4 @@
-function [AC,FC] = ex4_AC_whv_cs
+function [AC,FC] = inputfile_AC_whv_cs
 
 %% 
 

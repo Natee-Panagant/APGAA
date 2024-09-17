@@ -1,4 +1,4 @@
-function [AC,FC] = ex3_AC_whv
+function [AC,FC] = inputfile_AC_wing_tail
 
 %% 
 

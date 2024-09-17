@@ -2,12 +2,10 @@ function [gobj,qobj] = plot_F(rst)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Plot Aerodynamic Loadings %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-PanelDat = rst.PanelDat;
 F = rst.F_VLM;
 
 gobji = plot_panel(rst);
-P = PanelDat.VtxPt;
+P = rst.Sm;% Vortex Point (in VLM) or Sm (in DLM)
 
 hold on
 set(gobji.Children(contains(get(gobji.Children,'Tag'),'Arrow')),'Visible','off');
@@ -24,10 +22,32 @@ z = xyz(:,3); w = uvw(:,3);
 % v = rescale(v,0.1,1);
 % w = rescale(w,0.1,1);
 
-q1 = quiver3(x,y,z,u,zeros(size(u)),zeros(size(u)),'r');
-q2 = quiver3(x,y,z,zeros(size(v)),v,zeros(size(v)),'g');
-q3 = quiver3(x,y,z,zeros(size(w)),zeros(size(w)),w,'b');
 
+q1 = quiver3(x,y,z,u,zeros(size(u)),zeros(size(u)),0,'r');
+q2 = quiver3(x,y,z,zeros(size(v)),v,zeros(size(v)),0,'g');
+q3 = quiver3(x,y,z,zeros(size(w)),zeros(size(w)),w,0,'b');
+
+% quiver scaling normalization
+hold off
+maxd = max([x;y;z]);
+
+hU1 = get(q1,'UData');
+hV1 = get(q1,'VData');
+hW1 = get(q1,'WData');
+hU2 = get(q2,'UData');
+hV2 = get(q2,'VData');
+hW2 = get(q2,'WData');
+hU3 = get(q3,'UData');
+hV3 = get(q3,'VData');
+hW3 = get(q3,'WData');
+
+maxf = max([hU1;hV1;hW1;hU2;hV2;hW2;hU3;hV3;hW3]);
+scale = 0.5*maxd/maxf;%Scale the longest quiver as % of max axis range
+
+set(q1,'UData',scale*hU1,'VData',scale*hV1,'WData',scale*hW1);
+set(q2,'UData',scale*hU2,'VData',scale*hV2,'WData',scale*hW2);
+set(q3,'UData',scale*hU3,'VData',scale*hV3,'WData',scale*hW3);
+%
 
 set(q1,'Tag','Quiver_Force_X');
 set(q2,'Tag','Quiver_Force_Y');
