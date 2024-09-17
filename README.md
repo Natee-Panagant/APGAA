@@ -12,3 +12,8 @@ APGAA has been rigorously tested and validated against PanelAero, with all test 
 
 Reference:
 [1] Voß, A., “An Implementation of the Vortex Lattice and the Doublet Lattice Method,” Institut für Aeroelastik, Deutsches Zentrum für Luft- und Raumfahrt, Göttingen, Germany, Technical Report DLR-IB-AE-GO-2020-137, October 2020, https://elib.dlr.de/136536/.
+
+How to run:
+1) run the 'init.m' file in the main folder to add required directory to MATLAB path.
+2) All examples and tutorials are included in the /examples directory. You can browse /examples directory and run the script/live-script files.
+3) You can write your old script and input files to run new created model.
