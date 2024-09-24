@@ -122,6 +122,10 @@ end
 F_VLM_total = sum(F_VLM,1);
 M_VLM_total = sum(M_VLM,1);
 
+% Removed unused data
+PanelDat = rmfield(PanelDat,{'NodesW','VtxPt','Ring2Lift','ColPt','NormV',...
+           'delx','dely','S','WakePanel','TrailPanel','nvtx','nnode','npanel','nwake'});
+
 % Return all results and data
 rst = merge_struct;
 

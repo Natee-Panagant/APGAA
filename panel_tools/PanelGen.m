@@ -19,7 +19,6 @@ PanelDat.S = [];
 PanelDat.WingPanel = [];
 PanelDat.WakePanel = [];
 PanelDat.TrailPanel = [];
-PanelDat.SurfID = [];
 nnode = [];nwake = [];npanel = [];
 
 iSurf = 0;
