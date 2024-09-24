@@ -2,7 +2,7 @@ function gobj = plot_Cp(rst)
 PanelDat = rst.PanelDat;
 
 %% Generate panel plotting data
-node = PanelDat.Nodes;
+node = PanelDat.Nodes_ST;
 ele = PanelDat.WingPanel;
 x = [node(ele(:,1),1) , node(ele(:,2),1) , node(ele(:,3),1) , node(ele(:,4),1) , node(ele(:,1),1)]';
 y = [node(ele(:,1),2) , node(ele(:,2),2) , node(ele(:,3),2) , node(ele(:,4),2) , node(ele(:,1),2)]';

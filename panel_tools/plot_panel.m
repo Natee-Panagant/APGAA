@@ -9,7 +9,7 @@ wake_flag = 0;
 
 clrl = get_color_list;
 figure; hold on;
-node = PanelDat.Nodes;
+node = PanelDat.Nodes_ST;
 ele = PanelDat.WingPanel;
 Nsurf = numel(PanelDat.SurfPanelID);
 SurfName = PanelDat.SurfName;

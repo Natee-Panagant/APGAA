@@ -7,6 +7,7 @@ function [PanelDat,FC,Sc,Sm,Si,So,S,pspan,pchord,normvec] = PanelGen(input_filen
 nSurf = size(AC,2);
 
 PanelDat.Nodes = [];
+PanelDat.Nodes_ST = [];
 PanelDat.NodesW = [];
 PanelDat.VtxPt = [];
 PanelDat.Ring2Lift = [];
@@ -38,6 +39,7 @@ for i=1:nSurf
             iSurf = iSurf+1;
             AcSurf = fullWingPanelGen(AC(i),[0 1]);
             panelDat = MappedMeshAero(AC(i),AcSurf,2);%second mode panel index see details in MappedMeshAero.m
+            panelDat_ST = MappedMeshStructure(AC(i),AcSurf,2);%Gen Structural mesh for plot
 
             nvtx(iSurf) = size(panelDat.VtxPt,1);
             nnode(iSurf) = size(panelDat.Nodes,1);
@@ -55,6 +57,7 @@ for i=1:nSurf
             %
 
             PanelDat.Nodes = [PanelDat.Nodes;panelDat.Nodes];
+            PanelDat.Nodes_ST = [PanelDat.Nodes_ST;panelDat_ST.Nodes];
             PanelDat.NodesW = [PanelDat.NodesW;panelDat.NodesW];
             PanelDat.VtxPt = [PanelDat.VtxPt;panelDat.VtxPt];
             PanelDat.Ring2Lift = [PanelDat.Ring2Lift zeros(sum(npanel(1:iSurf-1)),npanel(iSurf));zeros(npanel(iSurf),sum(npanel(1:iSurf-1))) panelDat.Ring2Lift];
@@ -77,6 +80,7 @@ for i=1:nSurf
                 if iSubSurf(j) == 0
                     AcSurf = fullWingPanelGen(AC(i),[iInterval(j) iInterval(j+1)]);
                     panelDat = MappedMeshAero(AC(i),AcSurf,2);%second mode panel index see details in MappedMeshAero.m
+                    panelDat_ST = MappedMeshStructure(AC(i),AcSurf,2);%Gen Structural mesh for plot
                     if init == 0
                         k = k+1;
                         SSName{k} = AC(i).Label;
@@ -99,6 +103,7 @@ for i=1:nSurf
                         AC(i).SubSurf(iSubSurf(j)).RotAxis_L = AcSurf.RotAxis_L;
                     end
                     panelDat = MappedMeshAero(AC(i),AcSurf,2);%second mode panel index see details in MappedMeshAero.m
+                    panelDat_ST = MappedMeshStructure(AC(i),AcSurf,2);%Gen Structural mesh for plot
                     if numel(AcSurf.RpanelNum)<size(panelDat.WingPanel,1) && init == 0
                         k = k+1;
                         SSName{k} = AC(i).Label;
@@ -139,6 +144,7 @@ for i=1:nSurf
                 npanel(iSurf) = size(panelDat.WingPanel,1);
                 nwake(iSurf) = size(panelDat.NodesW,1);
                 PanelDat.Nodes = [PanelDat.Nodes;panelDat.Nodes];
+                PanelDat.Nodes_ST = [PanelDat.Nodes_ST;panelDat_ST.Nodes];
                 PanelDat.NodesW = [PanelDat.NodesW;panelDat.NodesW];
                 PanelDat.VtxPt = [PanelDat.VtxPt;panelDat.VtxPt];
                 PanelDat.Ring2Lift = [PanelDat.Ring2Lift zeros(sum(npanel(1:iSurf-1)),npanel(iSurf));zeros(npanel(iSurf),sum(npanel(1:iSurf-1))) panelDat.Ring2Lift];
@@ -188,6 +194,7 @@ Trl = PanelDat.Ring2Lift;
 nPanel = size(PanelDat.WingPanel,1);
 
 % Rotate Control-Surfaces %Natee
+% -> Aerodynamic Panel
 for i = 1:numel(PanelDat.RotAngle)
     if PanelDat.RotAngle{i} ~= 0
         eidx = PanelDat.SurfPanelID{i};
@@ -200,6 +207,21 @@ for i = 1:numel(PanelDat.RotAngle)
         RefPt = PanelDat.HingePt{i}';
         [X,Y,Z] = AxisRotating(X0,Y0,Z0,Alpha,AxisVec,RefPt);
         PanelDat.Nodes(nidx,:) = [X,Y,Z];
+    end
+end
+% -> Structural Panel
+for i = 1:numel(PanelDat.RotAngle)
+    if PanelDat.RotAngle{i} ~= 0
+        eidx = PanelDat.SurfPanelID{i};
+        nidx = unique(reshape(PanelDat.WingPanel(eidx,:),[],1));
+        X0 = PanelDat.Nodes_ST(nidx,1);
+        Y0 = PanelDat.Nodes_ST(nidx,2);
+        Z0 = PanelDat.Nodes_ST(nidx,3);
+        Alpha = PanelDat.RotAngle{i};
+        AxisVec = PanelDat.HingeAxis{i}';
+        RefPt = PanelDat.HingePt{i}';
+        [X,Y,Z] = AxisRotating(X0,Y0,Z0,Alpha,AxisVec,RefPt);
+        PanelDat.Nodes_ST(nidx,:) = [X,Y,Z];
     end
 end
 
