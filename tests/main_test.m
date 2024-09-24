@@ -7,7 +7,11 @@ main_dir = file_dir(1:sidx(end-1));
 
 cd(current_dir);
 
-addpath(genpath(main_dir));
+addpath(fullfile(main_dir,'examples'));
+addpath(fullfile(main_dir,'panel_tools'));
+addpath(fullfile(main_dir,'solver'));
+addpath(fullfile(current_dir,'references_data'));
+
 format long g
 
 % Test case list
